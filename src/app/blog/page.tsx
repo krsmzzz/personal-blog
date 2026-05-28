@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { fetchAllPosts } from "@/lib/content-bridge";
 
 export const metadata: Metadata = {
-  title: "Writing",
+  title: "文章",
   description: "关于 TypeScript、系统设计与独立开发的文章。",
 };
 
@@ -22,7 +22,7 @@ export default async function BlogPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-28 sm:py-36">
       <div className="mb-16">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/50 uppercase">Writing</p>
+        <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/50 uppercase">文章</p>
         <h1 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">文章</h1>
       </div>
       <div className="space-y-10">
@@ -33,7 +33,7 @@ export default async function BlogPage() {
                 {post.frontmatter.cover ? (
                   <Image src={post.frontmatter.cover} alt={post.frontmatter.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 640px) 100vw, 192px" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-muted/20 font-mono text-[10px] text-muted-foreground/30">no cover</div>
+                  <div className="flex h-full w-full items-center justify-center bg-muted/20 font-mono text-[10px] text-muted-foreground/30">无封面</div>
                 )}
               </div>
               <div className="flex min-w-0 flex-1 flex-col justify-center">

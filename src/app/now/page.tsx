@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Cpu, Server, Code2, Zap, Terminal, Circle } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Now",
-  description: "What I'm currently working on and thinking about.",
+  title: "近况",
+  description: "当前正在构建与思考的方向。",
 };
 
 const building = [
@@ -46,7 +46,7 @@ export default function NowPage() {
           现在
         </h1>
         <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground/70">
-          What I&apos;m currently focused on — updated May 2025.
+          当前专注的方向 — 2025 年 5 月更新。
         </p>
       </div>
 
@@ -56,7 +56,7 @@ export default function NowPage() {
           {/* Building */}
           <section>
             <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
-              Currently Building
+              正在构建
             </h2>
             <div className="space-y-4">
               {building.map((item) => (
@@ -85,7 +85,7 @@ export default function NowPage() {
           {/* Learning */}
           <section>
             <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
-              Currently Learning
+              正在学习
             </h2>
             <div className="space-y-3">
               {learning.map((item) => (
@@ -103,7 +103,7 @@ export default function NowPage() {
           {/* Thoughts */}
           <section>
             <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
-              Recent Thoughts
+              近期思考
             </h2>
             <div className="space-y-4">
               {thoughts.map((t, i) => (
@@ -122,7 +122,7 @@ export default function NowPage() {
         <aside className="lg:col-span-2">
           <div className="sticky top-28 rounded-xl border border-border bg-card/50 p-5">
             <h2 className="mb-4 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
-              Current Stack
+              技术栈
             </h2>
             <div className="grid grid-cols-2 gap-2">
               {stack.map((item) => {

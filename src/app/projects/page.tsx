@@ -4,7 +4,7 @@ import { getAllProjects } from "@/lib/content";
 import { Bot, Shield, Terminal, Mic, ArrowUpRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Projects",
+  title: "项目",
   description: "精选项目作品。",
 };
 

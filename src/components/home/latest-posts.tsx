@@ -26,7 +26,7 @@ export function LatestPosts({
     <AnimatedSection bg="bg-background">
       <AnimatedItem className="mb-16">
         <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/50 uppercase">
-          Writing
+          文章
         </p>
         <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
           文章

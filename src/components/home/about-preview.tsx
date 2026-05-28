@@ -55,7 +55,7 @@ export function AboutPreview() {
                 <div className="size-1.5 rounded-full bg-muted-foreground/30" />
                 <div className="size-1.5 rounded-full bg-muted-foreground/30" />
                 <span className="ml-2 font-mono text-[10px] text-muted-foreground/35">
-                  system.info
+                  系统信息
                 </span>
               </div>
 

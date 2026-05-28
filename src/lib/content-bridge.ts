@@ -24,7 +24,7 @@ async function getSanityPostsSafe() {
         cover: p.cover,
       },
       content: "",
-      readingTime: p.readingTime > 0 ? `${p.readingTime} min read` : "1 min read",
+      readingTime: p.readingTime > 0 ? `${p.readingTime} 分钟阅读` : "1 分钟阅读",
       _sanityBody: p.body,
     }));
   } catch {
@@ -47,7 +47,7 @@ async function getSanityPostBySlugSafe(slug: string) {
         cover: post.cover,
       },
       content: "",
-      readingTime: post.readingTime > 0 ? `${post.readingTime} min read` : "1 min read",
+      readingTime: post.readingTime > 0 ? `${post.readingTime} 分钟阅读` : "1 分钟阅读",
       _sanityBody: post.body,
     };
   } catch {

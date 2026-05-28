@@ -18,15 +18,15 @@ const techStack = [
 ];
 
 const focus = [
-  { label: "AI Automation", detail: "Agent 工作流 + Tool Use", active: true },
+  { label: "AI 自动化", detail: "Agent 工作流 + Tool Use", active: true },
   { label: "Banking Architecture", detail: "AML / 风控 / 高并发系统", active: true },
   { label: "Independent Products", detail: "从 0 到 1 全栈交付", active: true },
 ];
 
 const timeline = [
-  { year: "2021", label: "Banking Systems", detail: "开始构建银行核心系统与反洗钱平台。" },
-  { year: "2023", label: "AI Automation", detail: "将 AI 引入金融风控与自动化流程。" },
-  { year: "2025", label: "Independent Building", detail: "独立开发 AI Agent 与个人产品。" },
+  { year: "2021", label: "银行系统", detail: "开始构建银行核心系统与反洗钱平台。" },
+  { year: "2023", label: "AI 自动化", detail: "将 AI 引入金融风控与自动化流程。" },
+  { year: "2025", label: "独立开发", detail: "独立开发 AI Agent 与个人产品。" },
 ];
 
 export default function AboutPage() {
@@ -77,7 +77,7 @@ export default function AboutPage() {
                 <div className="size-1.5 rounded-full bg-muted-foreground/30" />
                 <div className="size-1.5 rounded-full bg-muted-foreground/30" />
                 <div className="size-1.5 rounded-full bg-muted-foreground/30" />
-                <span className="ml-2 font-mono text-[10px] text-muted-foreground/35">focus.status</span>
+                <span className="ml-2 font-mono text-[10px] text-muted-foreground/35">专注状态</span>
               </div>
               <div className="p-5 space-y-3">
                 {focus.map((item) => (
@@ -139,7 +139,7 @@ export default function AboutPage() {
             </div>
 
             <div className="rounded-xl border border-border bg-card/50 p-5">
-              <h2 className="mb-4 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">Connect</h2>
+              <h2 className="mb-4 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">联系</h2>
               <div className="space-y-2">
                 {[
                   { label: "GitHub", href: "https://github.com" },

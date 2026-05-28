@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const navLinks = [
-  { href: "/blog", label: "Writing" },
-  { href: "/projects", label: "Projects" },
-  { href: "/now", label: "Now" },
-  { href: "/about", label: "About" },
+  { href: "/blog", label: "文章" },
+  { href: "/projects", label: "项目" },
+  { href: "/now", label: "近况" },
+  { href: "/about", label: "关于" },
 ];
 
 export function Navbar() {
