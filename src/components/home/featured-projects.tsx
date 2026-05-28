@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { ArrowUpRight, Bot, Shield, Terminal, Mic, type LucideIcon } from "lucide-react";
+import { MagneticCard } from "@/components/ui/magnetic-card";
 import { AnimatedSection, AnimatedItem } from "@/components/ui/animated-section";
 
 const GithubIcon = ({ className }: { className?: string }) => (
@@ -88,6 +89,7 @@ export function FeaturedProjects({ projects: externalProjects }: FeaturedProject
           const c = colorMap[project.color];
           return (
             <AnimatedItem key={project.title}>
+              <MagneticCard maxShift={3}>
               <div
                 
                 
@@ -134,6 +136,7 @@ export function FeaturedProjects({ projects: externalProjects }: FeaturedProject
                   </Link>
                 </div>
               </div>
+              </MagneticCard>
             </AnimatedItem>
           );
         })}

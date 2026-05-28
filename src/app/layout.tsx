@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
+import { CursorGlow } from "@/components/ui/cursor-glow";
 import { Footer } from "@/components/layout/footer";
 import "./globals.css";
 
@@ -42,6 +43,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
+          <CursorGlow />
           <main className="flex-1">{children}</main>
           <Footer />
         </ThemeProvider>
