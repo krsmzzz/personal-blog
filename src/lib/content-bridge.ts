@@ -147,23 +147,6 @@ export async function fetchProjectBySlug(slug: string) {
   return getMdxProjectBySlug(slug);
 }
 
-// ----- Thoughts -----
-
-export async function fetchAllThoughts(): Promise<{ content: string; date: string }[]> {
-  if (isSanityConfigured()) {
-    try {
-      const { getAllThoughts } = await import("./sanity/api");
-      const thoughts = await getAllThoughts();
-      return thoughts.map((t) => ({
-        content: t.content,
-        date: t.date,
-      }));
-    } catch {
-      return [];
-    }
-  }
-  return [];
-}
 
 // ----- Ideas -----
 
@@ -171,12 +154,7 @@ export interface IdeaFrontmatter {
   title: string;
   date: string;
   excerpt?: string;
-  tags?: string[];
-  coverImage?: string;
-  galleryImages?: Array<{ url?: string; alt?: string; caption?: string }>;
-  quote?: string;
-  links?: Array<{ label?: string; url?: string }>;
-  featured?: boolean;
+  galleryImages?: Array<{ url?: string; alt?: string }>;
 }
 
 export interface IdeaPost {
@@ -196,19 +174,12 @@ async function getSanityIdeasSafe(): Promise<IdeaPost[]> {
         title: i.title,
         date: i.date,
         excerpt: i.excerpt,
-        tags: i.tags,
-        coverImage: i.coverImage,
         galleryImages: i.galleryImages?.map((g) => ({
           url: g.asset?.url,
           alt: g.alt,
-          caption: g.caption,
         })),
-        quote: i.quote,
-        links: i.links,
-        featured: i.featured,
       },
       content: "",
-      _sanityBody: i.body,
     }));
   } catch {
     return [];
@@ -226,19 +197,12 @@ async function getSanityIdeaBySlugSafe(slug: string): Promise<IdeaPost | null> {
         title: idea.title,
         date: idea.date,
         excerpt: idea.excerpt,
-        tags: idea.tags,
-        coverImage: idea.coverImage,
         galleryImages: idea.galleryImages?.map((g) => ({
           url: g.asset?.url,
           alt: g.alt,
-          caption: g.caption,
         })),
-        quote: idea.quote,
-        links: idea.links,
-        featured: idea.featured,
       },
       content: "",
-      _sanityBody: idea.body,
     };
   } catch {
     return null;

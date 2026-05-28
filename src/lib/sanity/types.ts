@@ -32,21 +32,9 @@ export interface Category {
   description?: string;
 }
 
-export interface Thought {
-  _id: string;
-  content: string;
-  date: string;
-}
-
 export interface IdeaImage {
   asset?: { url?: string };
   alt?: string;
-  caption?: string;
-}
-
-export interface IdeaLink {
-  label?: string;
-  url?: string;
 }
 
 export interface Idea {
@@ -55,11 +43,5 @@ export interface Idea {
   slug: string;
   date: string;
   excerpt?: string;
-  tags?: string[];
-  coverImage?: string;
   galleryImages?: IdeaImage[];
-  body: PortableTextBlock[];
-  quote?: string;
-  links?: IdeaLink[];
-  featured?: boolean;
 }

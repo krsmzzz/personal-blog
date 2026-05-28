@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { IdeaFrontmatter } from "@/lib/content-bridge";
 
@@ -9,40 +10,143 @@ interface IdeaCardProps {
 }
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" });
+  return new Date(dateStr).toLocaleDateString("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function getGridClass(count: number): string {
+  if (count === 1) return "grid-cols-1";
+  if (count === 2) return "grid-cols-2";
+  if (count === 3) return "grid-cols-2";
+  return "grid-cols-3";
+}
+
+function getImageClass(count: number, index: number): string {
+  if (count === 1) return "aspect-[4/3]";
+  if (count === 3) {
+    if (index === 0) return "aspect-square row-span-2";
+    return "aspect-square";
+  }
+  return "aspect-square";
 }
 
 export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
-  const { date, excerpt, tags, coverImage, quote } = frontmatter;
+  const { date, excerpt, galleryImages } = frontmatter;
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [lightbox, setLightbox] = useState<{ url: string; index: number } | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.unobserve(el); } },
+      { threshold: 0.05 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const images = galleryImages?.filter((g) => g.url) || [];
+  const count = images.length;
 
   return (
-    <div className="group relative transition-all duration-500">
-      <div className="overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-500 hover:-translate-y-1 hover:border-accent-blue/20 hover:shadow-[0_0_30px_-8px_rgba(56,189,248,0.06)]">
-        {coverImage ? (
-          <div className="relative aspect-[16/9] overflow-hidden border-b border-border/40">
-            <Image src={coverImage} alt="" fill className="object-cover transition-all duration-700 group-hover:scale-[1.03]" sizes="(max-width: 768px) 100vw, 600px" />
-            <div className="absolute inset-0 bg-gradient-to-t from-card/40 to-transparent" />
-          </div>
-        ) : quote ? (
-          <div className="border-b border-border/40 bg-accent-blue-subtle/5 px-5 py-6">
-            <p className="text-sm italic leading-relaxed text-muted-foreground/70">“{quote}”</p>
-          </div>
-        ) : null}
+    <div
+      ref={ref}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(8px)",
+        transition: "opacity 0.4s ease-out, transform 0.4s ease-out",
+      }}
+    >
+      <div className="rounded-xl border border-border/25 bg-card/70 p-4 transition-all duration-300 hover:border-border/50">
+        {excerpt && (
+          <p className="text-[13px] leading-relaxed whitespace-pre-wrap text-muted-foreground/80">
+            {excerpt}
+          </p>
+        )}
 
-        <div className="p-5">
-          {tags && tags.length > 0 && (
-            <div className="mb-3 flex flex-wrap gap-1.5">
-              {tags.map((tag) => (
-                <span key={tag} className="rounded-md border border-border/50 px-2 py-0.5 font-mono text-[10px] tracking-wide text-muted-foreground/50">{tag}</span>
-              ))}
-            </div>
+        {count > 0 && (
+          <div className={`mt-3 grid gap-1 ${getGridClass(count)}`}>
+            {images.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setLightbox({ url: img.url!, index: i })}
+                className={`group relative w-full cursor-zoom-in overflow-hidden rounded-lg ${getImageClass(count, i)}`}
+              >
+                <Image
+                  src={img.url!}
+                  alt={img.alt || ""}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes={
+                    count === 1
+                      ? "(max-width: 640px) 100vw, 500px"
+                      : "(max-width: 640px) 50vw, 250px"
+                  }
+                />
+                <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/15" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        <time className="mt-3 block font-mono text-[10px] text-muted-foreground/25">
+          {formatDate(date)}
+        </time>
+      </div>
+
+      {/* Fullscreen Lightbox */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 bg-black"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            onClick={() => setLightbox(null)}
+            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+
+          <div className="absolute left-4 top-4 z-10 rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-white/50 backdrop-blur-sm">
+            {lightbox.index + 1} / {count}
+          </div>
+
+          {lightbox.index > 0 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); setLightbox({ url: images[lightbox.index - 1].url!, index: lightbox.index - 1 }); }}
+              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
           )}
-          {excerpt && <p className="text-sm leading-relaxed text-muted-foreground/80">{excerpt}</p>}
-          <div className="mt-4">
-            <time className="font-mono text-[11px] text-muted-foreground/40">{formatDate(date)}</time>
+          {lightbox.index < count - 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); setLightbox({ url: images[lightbox.index + 1].url!, index: lightbox.index + 1 }); }}
+              className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          )}
+
+          <div className="flex h-full w-full items-center justify-center p-8" onClick={(e) => e.stopPropagation()}>
+            <Image
+              src={lightbox.url}
+              alt=""
+              fill
+              className="object-contain"
+              sizes="100vw"
+            />
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { fetchProjectBySlug, fetchAllProjects } from "@/lib/content-bridge";
 import { MDXContent } from "@/components/mdx/mdx-content";
@@ -35,12 +34,6 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-28 sm:py-36">
-      <Link
-        href="/projects"
-        className="mb-6 inline-flex text-sm text-muted-foreground/60 transition-colors duration-200 hover:text-accent-blue"
-      >
-        ← 返回项目
-      </Link>
 
       <header className="mb-12">
         <div className="flex flex-wrap items-center gap-2 mb-4">

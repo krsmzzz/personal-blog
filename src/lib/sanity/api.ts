@@ -1,12 +1,12 @@
 import { client, previewClient } from "./client";
-import type { Post, Project, Thought, Idea } from "./types";
+import type { Post, Project, Idea } from "./types";
 
 // ----- Posts -----
 
 export async function getAllPosts(preview = false): Promise<Post[]> {
   const c = preview ? previewClient : client;
   return c.fetch<Post[]>(`
-    *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
+    *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))] | order(publishedAt desc) {
       _id,
       title,
       "slug": coalesce(slug.current, _id),
@@ -23,7 +23,7 @@ export async function getAllPosts(preview = false): Promise<Post[]> {
 export async function getPostBySlug(slug: string, preview = false): Promise<Post | null> {
   const c = preview ? previewClient : client;
   return c.fetch<Post | null>(`
-    *[_type == "post" && slug.current == $slug][0] {
+    *[_type == "post" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
       _id,
       title,
       "slug": slug.current,
@@ -39,7 +39,7 @@ export async function getPostBySlug(slug: string, preview = false): Promise<Post
 
 export async function getAllPostSlugs(): Promise<string[]> {
   return client.fetch<string[]>(`
-    *[_type == "post" && defined(slug.current)].slug.current
+    *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))].slug.current
   `);
 }
 
@@ -48,7 +48,7 @@ export async function getAllPostSlugs(): Promise<string[]> {
 export async function getAllProjects(preview = false): Promise<Project[]> {
   const c = preview ? previewClient : client;
   return c.fetch<Project[]>(`
-    *[_type == "project" && defined(slug.current)] | order(_createdAt desc) {
+    *[_type == "project" && defined(slug.current) && !(_id in path("drafts.**"))] | order(_createdAt desc) {
       _id,
       title,
       "slug": slug.current,
@@ -66,7 +66,7 @@ export async function getAllProjects(preview = false): Promise<Project[]> {
 export async function getProjectBySlug(slug: string, preview = false): Promise<Project | null> {
   const c = preview ? previewClient : client;
   return c.fetch<Project | null>(`
-    *[_type == "project" && slug.current == $slug][0] {
+    *[_type == "project" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
       _id,
       title,
       "slug": slug.current,
@@ -81,41 +81,21 @@ export async function getProjectBySlug(slug: string, preview = false): Promise<P
   `, { slug });
 }
 
-// ----- Thoughts -----
-
-export async function getAllThoughts(preview = false): Promise<Thought[]> {
-  const c = preview ? previewClient : client;
-  return c.fetch<Thought[]>(`
-    *[_type == "thought" && defined(date)] | order(date desc) {
-      _id,
-      content,
-      date
-    }
-  `);
-}
-
 // ----- Ideas -----
 
 export async function getAllIdeas(preview = false): Promise<Idea[]> {
   const c = preview ? previewClient : client;
   return c.fetch<Idea[]>(`
-    *[_type == "idea" && defined(date)] | order(date desc) {
+    *[_type == "idea" && defined(date) && !(_id in path("drafts.**"))] | order(date desc) {
       _id,
-      title,
-      "slug": slug.current,
+      "title": content[0].children[0].text,
+      "slug": _id,
       date,
-      excerpt,
-      "tags": tags[]->title,
-      "coverImage": coverImage.asset->url,
-      "galleryImages": galleryImages[] {
+      "excerpt": array::join(string::split(pt::text(content), "")[0..999], ""),
+      "galleryImages": images[] {
         "asset": asset->{url},
-        alt,
-        caption
-      },
-      body,
-      quote,
-      links,
-      featured
+        alt
+      }
     }
   `);
 }
@@ -123,29 +103,22 @@ export async function getAllIdeas(preview = false): Promise<Idea[]> {
 export async function getIdeaBySlug(slug: string, preview = false): Promise<Idea | null> {
   const c = preview ? previewClient : client;
   return c.fetch<Idea | null>(`
-    *[_type == "idea" && (slug.current == $slug || _id == $slug)][0] {
+    *[_type == "idea" && _id == $slug && !(_id in path("drafts.**"))][0] {
       _id,
-      title,
-      "slug": slug.current,
+      "title": content[0].children[0].text,
+      "slug": _id,
       date,
-      excerpt,
-      "tags": tags[]->title,
-      "coverImage": coverImage.asset->url,
-      "galleryImages": galleryImages[] {
+      "excerpt": array::join(string::split(pt::text(content), "")[0..999], ""),
+      "galleryImages": images[] {
         "asset": asset->{url},
-        alt,
-        caption
-      },
-      body,
-      quote,
-      links,
-      featured
+        alt
+      }
     }
   `, { slug });
 }
 
 export async function getAllIdeaSlugs(): Promise<string[]> {
   return client.fetch<string[]>(`
-    *[_type == "idea" && defined(date)].coalesce(slug.current, _id)
+    *[_type == "idea" && defined(date)]._id
   `);
 }

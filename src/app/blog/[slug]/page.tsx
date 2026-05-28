@@ -1,6 +1,5 @@
 import type { PortableTextBlock } from "@portabletext/react";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { fetchPostBySlug, fetchAllPosts } from "@/lib/content-bridge";
@@ -65,9 +64,6 @@ export default async function BlogPostPage({ params }: Props) {
         )}
         <div className="mx-auto max-w-5xl px-6 py-24 sm:py-28">
           <header className="mb-12">
-            <Link href="/blog" className="mb-6 inline-flex text-sm text-muted-foreground/60 transition-colors duration-200 hover:text-accent-blue">
-              ← Blog
-            </Link>
             <div className="flex flex-wrap items-center gap-2 mb-4">
               {post.frontmatter.tags?.map((tag) => (
                 <span key={tag} className="rounded-md border border-border px-2 py-0.5 font-mono text-[10px] tracking-wide text-muted-foreground/50">{tag}</span>

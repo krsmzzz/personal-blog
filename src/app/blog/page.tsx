@@ -21,10 +21,6 @@ export default async function BlogPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-28 sm:py-36">
-      <div className="mb-16">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/50 uppercase">文章</p>
-        <h1 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">文章</h1>
-      </div>
       <div className="space-y-10">
         {posts.map((post, i) => (
           <article key={post.slug}>

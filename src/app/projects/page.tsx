@@ -25,14 +25,6 @@ export default async function ProjectsPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-28 sm:py-36">
-      <div className="mb-16">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/50 uppercase">
-          Projects
-        </p>
-        <h1 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
-          项目
-        </h1>
-      </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         {projects.map((p) => {
