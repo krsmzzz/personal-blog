@@ -1,17 +1,49 @@
 import { PortableText, type PortableTextBlock } from "@portabletext/react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\u4e00-\u9fff\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function extractText(children: unknown): string {
+  if (typeof children === "string") return children;
+  if (Array.isArray(children)) {
+    return children
+      .map((c) => {
+        if (typeof c === "string") return c;
+        if (c && typeof c === "object" && "props" in c && c.props?.children) {
+          return extractText(c.props.children);
+        }
+        return "";
+      })
+      .join("");
+  }
+  return "";
+}
 
 const components = {
   block: {
-    h2: ({ children, value }: { children?: React.ReactNode; value?: { _key: string } }) => (
-      <h2 id={value?._key} className="mt-10 mb-4 scroll-mt-24 text-xl font-semibold tracking-tight text-foreground border-b border-border/50 pb-2">
-        {children}
-      </h2>
-    ),
-    h3: ({ children }: { children?: React.ReactNode }) => (
-      <h3 className="mt-8 mb-3 scroll-mt-24 text-lg font-semibold text-foreground">{children}</h3>
-    ),
+    h2: ({ children }: { children?: React.ReactNode }) => {
+      const text = extractText(children);
+      return (
+        <h2 id={slugify(text)} className="mt-10 mb-4 scroll-mt-24 text-xl font-semibold tracking-tight text-foreground border-b border-border/50 pb-2">
+          {children}
+        </h2>
+      );
+    },
+    h3: ({ children }: { children?: React.ReactNode }) => {
+      const text = extractText(children);
+      return (
+        <h3 id={slugify(text)} className="mt-8 mb-3 scroll-mt-24 text-lg font-semibold text-foreground">
+          {children}
+        </h3>
+      );
+    },
     normal: ({ children }: { children?: React.ReactNode }) => (
       <p className="my-4 leading-relaxed text-foreground/85">{children}</p>
     ),
