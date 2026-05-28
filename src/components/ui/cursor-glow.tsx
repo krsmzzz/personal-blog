@@ -81,7 +81,7 @@ export function CursorGlow() {
       {/* Main cursor glow — deep blue, 1000px, blur 160px */}
       <div
         ref={glowRef}
-        className="pointer-events-none fixed left-0 top-0 z-0 opacity-0"
+        className="pointer-events-none fixed left-0 top-0 z-20 opacity-0"
         style={{
           width: "1000px",
           height: "1000px",
@@ -97,7 +97,7 @@ export function CursorGlow() {
       {/* Trail glow — indigo-tinged, 750px, blur 150px */}
       <div
         ref={trailRef}
-        className="pointer-events-none fixed left-0 top-0 z-0 opacity-0"
+        className="pointer-events-none fixed left-0 top-0 z-20 opacity-0"
         style={{
           width: "750px",
           height: "750px",

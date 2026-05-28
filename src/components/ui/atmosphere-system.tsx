@@ -57,7 +57,7 @@ export function AtmosphereSystem() {
       {/* Layer A — Deep blue primary, top-right zone, 1300px, blur 180px */}
       <div
         ref={layerARef}
-        className="pointer-events-none fixed z-0 will-change-transform"
+        className="pointer-events-none fixed z-10 will-change-transform"
         style={{
           width: "1300px",
           height: "1300px",
@@ -74,7 +74,7 @@ export function AtmosphereSystem() {
       {/* Layer B — Cool blue + subtle indigo, mid-left zone, 1100px, blur 165px */}
       <div
         ref={layerBRef}
-        className="pointer-events-none fixed z-0 will-change-transform"
+        className="pointer-events-none fixed z-10 will-change-transform"
         style={{
           width: "1100px",
           height: "1100px",
@@ -91,7 +91,7 @@ export function AtmosphereSystem() {
       {/* Layer C — Indigo accent, bottom-right, 900px, blur 150px */}
       <div
         ref={layerCRef}
-        className="pointer-events-none fixed z-0 will-change-transform"
+        className="pointer-events-none fixed z-10 will-change-transform"
         style={{
           width: "900px",
           height: "900px",
