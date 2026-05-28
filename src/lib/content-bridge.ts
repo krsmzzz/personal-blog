@@ -145,3 +145,21 @@ export async function fetchProjectBySlug(slug: string) {
   }
   return getMdxProjectBySlug(slug);
 }
+
+// ----- Thoughts -----
+
+export async function fetchAllThoughts(): Promise<{ content: string; date: string }[]> {
+  if (isSanityConfigured()) {
+    try {
+      const { getAllThoughts } = await import("./sanity/api");
+      const thoughts = await getAllThoughts();
+      return thoughts.map((t) => ({
+        content: t.content,
+        date: t.date,
+      }));
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}

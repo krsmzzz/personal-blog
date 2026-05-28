@@ -1,5 +1,5 @@
 import { client, previewClient } from "./client";
-import type { Post, Project } from "./types";
+import type { Post, Project, Thought } from "./types";
 
 // ----- Posts -----
 
@@ -79,4 +79,17 @@ export async function getProjectBySlug(slug: string, preview = false): Promise<P
       featured
     }
   `, { slug });
+}
+
+// ----- Thoughts -----
+
+export async function getAllThoughts(preview = false): Promise<Thought[]> {
+  const c = preview ? previewClient : client;
+  return c.fetch<Thought[]>(`
+    *[_type == "thought" && defined(date)] | order(date desc) {
+      _id,
+      content,
+      date
+    }
+  `);
 }

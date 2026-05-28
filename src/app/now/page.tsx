@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Circle } from "lucide-react";
+import { fetchAllThoughts } from "@/lib/content-bridge";
 
 export const metadata: Metadata = {
   title: "近况",
@@ -24,7 +25,12 @@ const thoughts = [
   "2025-04-25 — 开始用 Go 写一个轻量 API 网关。Rust 也很好，但 Go 的简单性在团队协作中更有优势。",
 ];
 
-export default function NowPage() {
+export default async function NowPage() {
+
+  const sanityThoughts = await fetchAllThoughts();
+  const displayThoughts = sanityThoughts.length > 0
+    ? sanityThoughts.map((t) => `${t.date} — ${t.content}`)
+    : thoughts;
   return (
     <div className="mx-auto max-w-5xl px-6 py-28 sm:py-36">
       {/* Header */}
@@ -94,7 +100,7 @@ export default function NowPage() {
             近期思考
           </h2>
           <div className="space-y-4">
-            {thoughts.map((t, i) => (
+            {displayThoughts.map((t, i) => (
               <p
                 key={i}
                 className="text-sm leading-relaxed text-muted-foreground/70"

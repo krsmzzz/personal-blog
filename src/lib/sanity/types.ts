@@ -31,3 +31,9 @@ export interface Category {
   slug: string;
   description?: string;
 }
+
+export interface Thought {
+  _id: string;
+  content: string;
+  date: string;
+}
