@@ -9,8 +9,23 @@ const links = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-border">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-10">
+    <footer className="relative overflow-hidden border-t border-border">
+      {/* Deep infra blue footer atmosphere */}
+      <div
+        className="pointer-events-none absolute rounded-full"
+        style={{
+          left: "50%",
+          top: "-250px",
+          width: "600px",
+          height: "600px",
+          background:
+            "radial-gradient(ellipse at 50% 50%, rgba(59,130,246,0.08) 0%, rgba(37,99,235,0.03) 40%, transparent 68%)",
+          filter: "blur(130px)",
+          transform: "translateX(-50%)",
+          opacity: 0.55,
+        }}
+      />
+      <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-6 py-10">
         <p className="text-xs text-muted-foreground/40">
           © {new Date().getFullYear()} ruikang
         </p>

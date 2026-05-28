@@ -76,9 +76,11 @@ function TerminalCard() {
 }
 
 // === Hero Glow layers with subtle mouse parallax ===
+
 function HeroGlowLayers() {
   const layer1Ref = useRef<HTMLDivElement>(null);
   const layer2Ref = useRef<HTMLDivElement>(null);
+  const layer3Ref = useRef<HTMLDivElement>(null);
   const rafRef = useRef(0);
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
   const currentRef = useRef({ x: 0.5, y: 0.5 });
@@ -94,20 +96,27 @@ function HeroGlowLayers() {
     const animate = () => {
       const cur = currentRef.current;
       const tgt = mouseRef.current;
-      cur.x += (tgt.x - cur.x) * 0.02;
-      cur.y += (tgt.y - cur.y) * 0.02;
+      cur.x += (tgt.x - cur.x) * 0.012;
+      cur.y += (tgt.y - cur.y) * 0.012;
 
       const l1 = layer1Ref.current;
       const l2 = layer2Ref.current;
+      const l3 = layer3Ref.current;
+
       if (l1) {
-        const dx = (cur.x - 0.5) * 20;
-        const dy = (cur.y - 0.5) * 20;
-        l1.style.transform = `translate(calc(-50% + ${dx}px), ${dy}px)`;
+        const dx = (cur.x - 0.5) * 12;
+        const dy = (cur.y - 0.5) * 12;
+        l1.style.transform = `translate(calc(15% + ${dx}px), calc(-30% + ${dy}px))`;
       }
       if (l2) {
-        const dx = (cur.x - 0.5) * -12;
-        const dy = (cur.y - 0.5) * -12;
-        l2.style.transform = `translate(${dx}px, ${dy}px)`;
+        const dx = (cur.x - 0.5) * -8;
+        const dy = (cur.y - 0.5) * -8;
+        l2.style.transform = `translate(calc(55% + ${dx}px), calc(5% + ${dy}px))`;
+      }
+      if (l3) {
+        const dx = (cur.x - 0.5) * 6;
+        const dy = (cur.y - 0.5) * -6;
+        l3.style.transform = `translate(calc(0% + ${dx}px), calc(30% + ${dy}px))`;
       }
 
       rafRef.current = requestAnimationFrame(animate);
@@ -124,50 +133,50 @@ function HeroGlowLayers() {
 
   return (
     <>
-      {/* Layer 1 — Main hero glow, ultra diffuse */}
+      {/* Layer 1 — Deep blue primary haze, top-right, 950px, blur 170px */}
       <div
         ref={layer1Ref}
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-full animate-glow-primary will-change-transform"
+        className="pointer-events-none absolute left-0 top-0 rounded-full will-change-transform"
         style={{
-          top: "-300px",
-          width: "900px",
-          height: "900px",
-          background: "radial-gradient(circle, rgba(56,189,248,0.14) 0%, rgba(125,211,252,0.08) 30%, transparent 65%)",
-          filter: "blur(140px)",
+          width: "950px",
+          height: "950px",
+          background:
+            "radial-gradient(ellipse at 60% 30%, rgba(59,130,246,0.16) 0%, rgba(59,130,246,0.08) 25%, rgba(37,99,235,0.03) 50%, transparent 70%)",
+          filter: "blur(170px)",
+          animation: "glow-atmosphere-a 18s ease-in-out infinite",
         }}
       />
 
-      {/* Layer 2 — Side atmosphere, mouse-reactive */}
+      {/* Layer 2 — Cool blue + indigo side haze, right edge, 750px, blur 150px */}
       <div
         ref={layer2Ref}
-        className="pointer-events-none absolute rounded-full animate-glow-secondary will-change-transform"
+        className="pointer-events-none absolute right-0 top-0 rounded-full will-change-transform"
         style={{
-          top: "5%",
-          right: "0",
-          width: "600px",
-          height: "700px",
-          background: "radial-gradient(ellipse at 30% 40%, rgba(96,165,250,0.10) 0%, rgba(56,189,248,0.04) 40%, transparent 72%)",
-          filter: "blur(100px)",
-          opacity: 0.35,
+          width: "750px",
+          height: "750px",
+          background:
+            "radial-gradient(ellipse at 40% 40%, rgba(96,165,250,0.14) 0%, rgba(99,102,241,0.06) 25%, rgba(59,130,246,0.03) 45%, transparent 72%)",
+          filter: "blur(150px)",
+          animation: "glow-atmosphere-b 16s ease-in-out infinite",
         }}
       />
 
-      {/* Layer 3 — Bottom subtle haze */}
+      {/* Layer 3 — Blue-gray bottom depth, 650px, blur 140px */}
       <div
-        className="pointer-events-none absolute rounded-full animate-glow-tertiary"
+        ref={layer3Ref}
+        className="pointer-events-none absolute left-0 bottom-0 rounded-full will-change-transform"
         style={{
-          bottom: "-10%",
-          left: "10%",
-          width: "500px",
-          height: "400px",
-          background: "radial-gradient(ellipse, rgba(56,189,248,0.06) 0%, transparent 70%)",
-          filter: "blur(100px)",
+          width: "650px",
+          height: "650px",
+          background:
+            "radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.10) 0%, rgba(59,130,246,0.04) 35%, transparent 68%)",
+          filter: "blur(140px)",
+          animation: "glow-atmosphere-c 20s ease-in-out infinite",
         }}
       />
     </>
   );
 }
-
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cpu, Server, Code2, Zap, Terminal, Circle } from "lucide-react";
+import { Circle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "近况",
@@ -16,16 +16,6 @@ const learning = [
   { label: "AI Infra", detail: "GPU 调度 / 推理优化" },
   { label: "Multi-Agent Systems", detail: "CrewAI / AutoGen / LangGraph" },
   { label: "System Design", detail: "分布式系统 / 高并发架构" },
-];
-
-const stack = [
-  { label: "Next.js", icon: Code2 },
-  { label: "TypeScript", icon: Code2 },
-  { label: "Go", icon: Server },
-  { label: "Python", icon: Zap },
-  { label: "PostgreSQL", icon: Server },
-  { label: "Docker", icon: Terminal },
-  { label: "LLM / GPT-4", icon: Cpu },
 ];
 
 const thoughts = [
@@ -50,98 +40,70 @@ export default function NowPage() {
         </p>
       </div>
 
-      <div className="grid gap-16 lg:grid-cols-5">
-        {/* Main */}
-        <div className="space-y-16 lg:col-span-3">
-          {/* Building */}
-          <section>
-            <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
-              正在构建
-            </h2>
-            <div className="space-y-4">
-              {building.map((item) => (
-                <div key={item.label} className="flex items-start gap-3 rounded-xl border border-border bg-card/50 p-4">
-                  <Circle
-                    className={`mt-0.5 size-2 shrink-0 ${
-                      item.status === "active"
-                        ? "fill-accent-blue text-accent-blue"
-                        : "fill-muted-foreground/30 text-muted-foreground/30"
-                    }`}
-                  />
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground/85">{item.label}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground/60">{item.detail}</p>
-                  </div>
-                  {item.status === "paused" && (
-                    <span className="ml-auto shrink-0 rounded-md border border-border px-2 py-0.5 font-mono text-[9px] text-muted-foreground/40">
-                      paused
-                    </span>
-                  )}
+      <div className="mx-auto max-w-2xl space-y-16">
+        {/* Building */}
+        <section>
+          <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
+            正在构建
+          </h2>
+          <div className="space-y-4">
+            {building.map((item) => (
+              <div key={item.label} className="flex items-start gap-3 rounded-xl border border-border bg-card/50 p-4">
+                <Circle
+                  className={`mt-0.5 size-2 shrink-0 ${
+                    item.status === "active"
+                      ? "fill-accent-blue text-accent-blue"
+                      : "fill-muted-foreground/30 text-muted-foreground/30"
+                  }`}
+                />
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground/85">{item.label}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground/60">{item.detail}</p>
                 </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Learning */}
-          <section>
-            <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
-              正在学习
-            </h2>
-            <div className="space-y-3">
-              {learning.map((item) => (
-                <div key={item.label} className="flex items-start gap-3">
-                  <div className="mt-0.5 flex size-1.5 shrink-0 rounded-full bg-muted-foreground/30" />
-                  <div>
-                    <p className="text-sm text-foreground/80">{item.label}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground/50">{item.detail}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Thoughts */}
-          <section>
-            <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
-              近期思考
-            </h2>
-            <div className="space-y-4">
-              {thoughts.map((t, i) => (
-                <p
-                  key={i}
-                  className="text-sm leading-relaxed text-muted-foreground/70"
-                >
-                  {t}
-                </p>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        {/* Sidebar — Stack */}
-        <aside className="lg:col-span-2">
-          <div className="sticky top-28 rounded-xl border border-border bg-card/50 p-5">
-            <h2 className="mb-4 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
-              技术栈
-            </h2>
-            <div className="grid grid-cols-2 gap-2">
-              {stack.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.label}
-                    className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3 py-2 transition-colors duration-200 hover:border-accent-blue/20"
-                  >
-                    <Icon className="size-3.5 text-muted-foreground/50" />
-                    <span className="font-mono text-[11px] text-muted-foreground/70">
-                      {item.label}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+                {item.status === "paused" && (
+                  <span className="ml-auto shrink-0 rounded-md border border-border px-2 py-0.5 font-mono text-[9px] text-muted-foreground/40">
+                    paused
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
-        </aside>
+        </section>
+
+        {/* Learning */}
+        <section>
+          <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
+            正在学习
+          </h2>
+          <div className="space-y-3">
+            {learning.map((item) => (
+              <div key={item.label} className="flex items-start gap-3">
+                <div className="mt-0.5 flex size-1.5 shrink-0 rounded-full bg-muted-foreground/30" />
+                <div>
+                  <p className="text-sm text-foreground/80">{item.label}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground/50">{item.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Thoughts */}
+        <section>
+          <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">
+            近期思考
+          </h2>
+          <div className="space-y-4">
+            {thoughts.map((t, i) => (
+              <p
+                key={i}
+                className="text-sm leading-relaxed text-muted-foreground/70"
+              >
+                {t}
+              </p>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

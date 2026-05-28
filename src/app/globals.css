@@ -219,3 +219,21 @@
   0% { opacity: 0; transform: translateY(24px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
+/* === Atmospheric Glow Keyframes (ultra-slow breathing, 12-18s) === */
+
+@keyframes glow-atmosphere-a {
+  0%, 100% { opacity: 0.6; filter: blur(170px) saturate(1.1); }
+  50% { opacity: 0.95; filter: blur(180px) saturate(1.2); }
+}
+
+@keyframes glow-atmosphere-b {
+  0%, 100% { opacity: 0.45; filter: blur(150px) saturate(1.1); }
+  30% { opacity: 0.75; filter: blur(158px) saturate(1.15); }
+  70% { opacity: 0.35; filter: blur(146px) saturate(1.05); }
+}
+
+@keyframes glow-atmosphere-c {
+  0%, 100% { opacity: 0.35; filter: blur(140px) saturate(1.05); }
+  55% { opacity: 0.6; filter: blur(148px) saturate(1.12); }
+}

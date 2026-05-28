@@ -1,21 +1,10 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Circle, Cpu, Server, Code2, Zap, Database, Container } from "lucide-react";
+import { ArrowUpRight, Circle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "About",
   description: "Building AI, systems, and personal products.",
 };
-
-const techStack = [
-  { label: "Java", icon: Server },
-  { label: "Go", icon: Zap },
-  { label: "TypeScript", icon: Code2 },
-  { label: "Python", icon: Cpu },
-  { label: "PostgreSQL", icon: Database },
-  { label: "Next.js", icon: Code2 },
-  { label: "Docker", icon: Container },
-  { label: "LLM / GPT-4", icon: Cpu },
-];
 
 const focus = [
   { label: "AI 自动化", detail: "Agent 工作流 + Tool Use", active: true },
@@ -115,7 +104,7 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-5 text-sm leading-relaxed text-muted-foreground/70">
               <p>AI 不是替代人，而是放大人的能力。最好的系统是那些让复杂变简单、让重复自动化的系统。</p>
-              <p>在工程中，少即是多。每减少一行不必要的代码，就减少一个未来的维护成本。优秀的架构来自约束，而非自由。</p>
+              <p>在工程中，少即是多。每减少一行不必要的代码，就增加一个未来的维护成本。优秀的架构来自约束，而非自由。</p>
               <p>独立开发不是孤独——它是选择性地与世界连接。构建自己相信的产品，按照自己的节奏。</p>
             </div>
           </section>
@@ -123,21 +112,6 @@ export default function AboutPage() {
 
         <aside className="lg:col-span-1">
           <div className="sticky top-28 space-y-8">
-            <div className="rounded-xl border border-border bg-card/50 p-5">
-              <h2 className="mb-4 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">Tech Stack</h2>
-              <div className="grid grid-cols-2 gap-2">
-                {techStack.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.label} className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3 py-2 transition-all duration-200 hover:border-accent-blue/20 hover:bg-accent-blue-subtle/10">
-                      <Icon className="size-3.5 text-muted-foreground/50" />
-                      <span className="font-mono text-[11px] text-muted-foreground/70">{item.label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
             <div className="rounded-xl border border-border bg-card/50 p-5">
               <h2 className="mb-4 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">联系</h2>
               <div className="space-y-2">
