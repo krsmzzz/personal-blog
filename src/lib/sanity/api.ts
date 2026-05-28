@@ -9,7 +9,7 @@ export async function getAllPosts(preview = false): Promise<Post[]> {
     *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
       _id,
       title,
-      "slug": slug.current,
+      "slug": coalesce(slug.current, _id),
       description,
       publishedAt,
       "tags": tags[]->title,
@@ -99,7 +99,7 @@ export async function getAllThoughts(preview = false): Promise<Thought[]> {
 export async function getAllIdeas(preview = false): Promise<Idea[]> {
   const c = preview ? previewClient : client;
   return c.fetch<Idea[]>(`
-    *[_type == "idea" && defined(slug.current)] | order(date desc) {
+    *[_type == "idea" && defined(date)] | order(date desc) {
       _id,
       title,
       "slug": slug.current,
@@ -123,7 +123,7 @@ export async function getAllIdeas(preview = false): Promise<Idea[]> {
 export async function getIdeaBySlug(slug: string, preview = false): Promise<Idea | null> {
   const c = preview ? previewClient : client;
   return c.fetch<Idea | null>(`
-    *[_type == "idea" && slug.current == $slug][0] {
+    *[_type == "idea" && (slug.current == $slug || _id == $slug)][0] {
       _id,
       title,
       "slug": slug.current,
@@ -146,6 +146,6 @@ export async function getIdeaBySlug(slug: string, preview = false): Promise<Idea
 
 export async function getAllIdeaSlugs(): Promise<string[]> {
   return client.fetch<string[]>(`
-    *[_type == "idea" && defined(slug.current)].slug.current
+    *[_type == "idea" && defined(date)].coalesce(slug.current, _id)
   `);
 }
