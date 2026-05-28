@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { AnimatedSection, AnimatedItem } from "@/components/ui/animated-section";
 import type { Post } from "@/lib/content";
@@ -42,13 +43,29 @@ export function LatestPosts({
                 className="group flex gap-5 -mx-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-muted/20"
               >
                 <div className="hidden h-[72px] w-[128px] shrink-0 overflow-hidden rounded-lg border border-border/40 bg-card transition-all duration-300 group-hover:border-accent-blue/20 sm:block">
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="flex h-full w-full items-center justify-center p-3"
-                  >
-                    <Thumbnail index={i} />
-                  </motion.div>
+                  {post.frontmatter.cover ? (
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="relative h-full w-full"
+                    >
+                      <Image
+                        src={post.frontmatter.cover}
+                        alt={post.frontmatter.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="128px"
+                      />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="flex h-full w-full items-center justify-center p-3"
+                    >
+                      <Thumbnail index={i} />
+                    </motion.div>
+                  )}
                 </div>
 
                 <div className="flex min-w-0 flex-1 flex-col justify-center">
@@ -97,7 +114,7 @@ export function LatestPosts({
   );
 }
 
-// Abstract thumbnails
+// Abstract thumbnails (fallback when no cover image)
 function Thumbnail({ index }: { index: number }) {
   const t = index % 4;
   if (t === 0) return <TerminalPreview />;
