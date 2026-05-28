@@ -74,3 +74,74 @@ export async function fetchPostBySlug(slug: string) {
   }
   return getMdxPostBySlug(slug);
 }
+
+// ----- Projects -----
+
+import type { Project } from "./content";
+import { getAllProjects as getMdxProjects, getProjectBySlug as getMdxProjectBySlug } from "./content";
+
+async function getSanityProjectsSafe() {
+  try {
+    const { getAllProjects } = await import("./sanity/api");
+    const projects = await getAllProjects();
+    return projects.map((p: { slug: string; title: string; description?: string; tags?: string[]; github?: string; demo?: string; year?: string; featured?: boolean; body: unknown }) => ({
+      slug: p.slug,
+      frontmatter: {
+        title: p.title,
+        description: p.description,
+        tags: p.tags,
+        github: p.github,
+        demo: p.demo,
+        year: p.year,
+        featured: p.featured,
+      },
+      content: "",
+      _sanityBody: p.body,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+async function getSanityProjectBySlugSafe(slug: string) {
+  try {
+    const { getProjectBySlug } = await import("./sanity/api");
+    const project = await getProjectBySlug(slug);
+    if (!project) return null;
+    return {
+      slug: project.slug,
+      frontmatter: {
+        title: project.title,
+        description: project.description,
+        tags: project.tags,
+        github: project.github,
+        demo: project.demo,
+        year: project.year,
+        featured: project.featured,
+      },
+      content: "",
+      _sanityBody: project.body,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchAllProjects(): Promise<Project[]> {
+  const mdxProjects = getMdxProjects();
+  if (isSanityConfigured()) {
+    const sanityProjects = await getSanityProjectsSafe();
+    const sanitySlugs = new Set(sanityProjects.map((p: any) => p.slug));
+    const filteredMdx = mdxProjects.filter((p) => !sanitySlugs.has(p.slug));
+    return [...sanityProjects, ...filteredMdx] as Project[];
+  }
+  return mdxProjects;
+}
+
+export async function fetchProjectBySlug(slug: string) {
+  if (isSanityConfigured()) {
+    const sanityProject = await getSanityProjectBySlugSafe(slug);
+    if (sanityProject) return sanityProject;
+  }
+  return getMdxProjectBySlug(slug);
+}

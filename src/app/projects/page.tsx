@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getAllProjects } from "@/lib/content";
+import { fetchAllProjects } from "@/lib/content-bridge";
 import { Bot, Shield, Terminal, Mic, ArrowUpRight } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ const projectIcons: Record<string, React.ComponentType<{ className?: string }>> 
 };
 
 export default async function ProjectsPage() {
-  const projects = getAllProjects();
+  const projects = await fetchAllProjects();
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-28 sm:py-36">

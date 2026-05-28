@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getProjectBySlug, getAllProjects } from "@/lib/content";
+import { fetchProjectBySlug, fetchAllProjects } from "@/lib/content-bridge";
 import { MDXContent } from "@/components/mdx/mdx-content";
+import { PortableTextContent } from "@/components/mdx/portable-text";
+import type { PortableTextBlock } from "@portabletext/react";
 import { ArrowUpRight } from "lucide-react";
 
 interface Props {
@@ -10,12 +12,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return getAllProjects().map((p) => ({ slug: p.slug }));
+  const projects = await fetchAllProjects();
+  return projects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await fetchProjectBySlug(slug);
   if (!project) return {};
   return {
     title: project.frontmatter.title,
@@ -25,8 +28,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectDetailPage({ params }: Props) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await fetchProjectBySlug(slug);
   if (!project) notFound();
+
+  const isSanity = "_sanityBody" in project && Array.isArray((project as { _sanityBody?: unknown })._sanityBody);
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-28 sm:py-36">
@@ -84,7 +89,11 @@ export default async function ProjectDetailPage({ params }: Props) {
       </header>
 
       <div className="prose-custom">
-        <MDXContent source={project.content} />
+        {isSanity ? (
+          <PortableTextContent value={(project as unknown as { _sanityBody: PortableTextBlock[] })._sanityBody} />
+        ) : (
+          <MDXContent source={project.content} />
+        )}
       </div>
     </div>
   );
