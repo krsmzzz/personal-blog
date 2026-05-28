@@ -8,6 +8,7 @@ interface AnimatedSectionProps {
   className?: string;
   bg?: string;
   as?: "section" | "div";
+  glow?: boolean;
 }
 
 export function AnimatedSection({
@@ -15,6 +16,7 @@ export function AnimatedSection({
   className,
   bg,
   as: Component = "section",
+  glow = false,
 }: AnimatedSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(false);
@@ -36,8 +38,18 @@ export function AnimatedSection({
   }, []);
 
   return (
-    <Component className={cn("py-28 sm:py-36", bg, className)}>
-      <div ref={ref} className="mx-auto max-w-5xl px-6">
+    <Component className={cn("relative overflow-hidden py-28 sm:py-36", bg, className)}>
+      {glow && (
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: "radial-gradient(ellipse at 50% 50%, rgba(56,189,248,0.04) 0%, transparent 70%)",
+            filter: "blur(80px)",
+            opacity: 0.35,
+          }}
+        />
+      )}
+      <div ref={ref} className="mx-auto max-w-5xl px-6 relative z-10">
         <div className={revealed ? "stagger-reveal revealed" : "stagger-reveal"}>
           {children}
         </div>

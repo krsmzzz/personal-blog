@@ -94,19 +94,19 @@ function HeroGlowLayers() {
     const animate = () => {
       const cur = currentRef.current;
       const tgt = mouseRef.current;
-      cur.x += (tgt.x - cur.x) * 0.03;
-      cur.y += (tgt.y - cur.y) * 0.03;
+      cur.x += (tgt.x - cur.x) * 0.02;
+      cur.y += (tgt.y - cur.y) * 0.02;
 
       const l1 = layer1Ref.current;
       const l2 = layer2Ref.current;
       if (l1) {
-        const dx = (cur.x - 0.5) * 30;
-        const dy = (cur.y - 0.5) * 30;
+        const dx = (cur.x - 0.5) * 20;
+        const dy = (cur.y - 0.5) * 20;
         l1.style.transform = `translate(calc(-50% + ${dx}px), ${dy}px)`;
       }
       if (l2) {
-        const dx = (cur.x - 0.5) * -20;
-        const dy = (cur.y - 0.5) * -20;
+        const dx = (cur.x - 0.5) * -12;
+        const dy = (cur.y - 0.5) * -12;
         l2.style.transform = `translate(${dx}px, ${dy}px)`;
       }
 
@@ -124,18 +124,45 @@ function HeroGlowLayers() {
 
   return (
     <>
+      {/* Layer 1 — Main hero glow, ultra diffuse */}
       <div
         ref={layer1Ref}
-        className="pointer-events-none absolute left-1/2 h-[700px] w-[700px] -translate-x-1/2 rounded-full blur-3xl animate-glow-primary will-change-transform"
-        style={{ top: "-200px", background: "radial-gradient(circle, #38bdf8 0%, transparent 70%)" }}
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-full animate-glow-primary will-change-transform"
+        style={{
+          top: "-300px",
+          width: "900px",
+          height: "900px",
+          background: "radial-gradient(circle, rgba(56,189,248,0.14) 0%, rgba(125,211,252,0.08) 30%, transparent 65%)",
+          filter: "blur(140px)",
+        }}
       />
+
+      {/* Layer 2 — Side atmosphere, mouse-reactive */}
       <div
         ref={layer2Ref}
-        className="pointer-events-none absolute h-[400px] w-[400px] rounded-full blur-2xl animate-glow-secondary will-change-transform"
-        style={{ top: "10%", left: "20%", background: "radial-gradient(circle, #7dd3fc 0%, transparent 70%)" }}
+        className="pointer-events-none absolute rounded-full animate-glow-secondary will-change-transform"
+        style={{
+          top: "5%",
+          right: "0",
+          width: "600px",
+          height: "700px",
+          background: "radial-gradient(ellipse at 30% 40%, rgba(96,165,250,0.10) 0%, rgba(56,189,248,0.04) 40%, transparent 72%)",
+          filter: "blur(100px)",
+          opacity: 0.35,
+        }}
       />
-      <div className="pointer-events-none absolute h-[300px] w-[300px] rounded-full blur-2xl animate-glow-tertiary"
-        style={{ bottom: "10%", right: "5%", background: "radial-gradient(circle, #38bdf8 0%, transparent 70%)" }}
+
+      {/* Layer 3 — Bottom subtle haze */}
+      <div
+        className="pointer-events-none absolute rounded-full animate-glow-tertiary"
+        style={{
+          bottom: "-10%",
+          left: "10%",
+          width: "500px",
+          height: "400px",
+          background: "radial-gradient(ellipse, rgba(56,189,248,0.06) 0%, transparent 70%)",
+          filter: "blur(100px)",
+        }}
       />
     </>
   );

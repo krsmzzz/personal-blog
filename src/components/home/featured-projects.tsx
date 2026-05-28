@@ -66,7 +66,7 @@ export function FeaturedProjects({ projects: externalProjects }: FeaturedProject
   if (!projects || projects.length === 0) return null;
 
   return (
-    <AnimatedSection bg="bg-surface-1">
+    <AnimatedSection bg="bg-surface-1" glow>
       <AnimatedItem className="mb-16">
         <div className="flex items-baseline justify-between">
           <div>

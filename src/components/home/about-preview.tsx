@@ -19,7 +19,7 @@ const focus = [
 
 export function AboutPreview() {
   return (
-    <AnimatedSection bg="bg-surface-2">
+    <AnimatedSection bg="bg-surface-2" glow>
       <AnimatedItem className="mb-16">
         <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/50 uppercase">
           About
