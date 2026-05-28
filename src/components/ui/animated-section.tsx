@@ -1,9 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const easeOut = [0.16, 1, 0.3, 1] as const; // premium easing curve
+const easeOut = [0.16, 1, 0.3, 1] as const;
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -41,12 +42,17 @@ export function AnimatedSection({
   bg,
   as: Component = "section",
 }: AnimatedSectionProps) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <Component className={cn("py-28 sm:py-36", bg, className)}>
       <div className="mx-auto max-w-5xl px-6">
         <motion.div
           variants={containerVariants}
-          initial="hidden"
+          initial={mounted ? "hidden" : false}
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
         >
