@@ -3,40 +3,52 @@
 import { useEffect, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
-interface TOCItem {
+export interface TOCItem {
   id: string;
   text: string;
   level: number;
 }
 
-export function TableOfContents({ content }: { content: string }) {
+interface TableOfContentsProps {
+  content?: string;
+  headings?: TOCItem[];
+}
+
+function extractHeadingsFromMDX(content: string): TOCItem[] {
+  const headingRegex = /^(#{2,3})\s+(.+)$/gm;
+  const items: TOCItem[] = [];
+  let match;
+  while ((match = headingRegex.exec(content)) !== null) {
+    const level = match[1].length;
+    const text = match[2].trim();
+    const id = text
+      .toLowerCase()
+      .replace(/[^\w\u4e00-\u9fff\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/(^-|-$)/g, "");
+    items.push({ id, text, level });
+  }
+  return items;
+}
+
+export function TableOfContents({ content, headings: externalHeadings }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>("");
   const [headings, setHeadings] = useState<TOCItem[]>([]);
 
   useEffect(() => {
-    const headingRegex = /^(#{2,3})\s+(.+)$/gm;
-    const items: TOCItem[] = [];
-    let match;
-    while ((match = headingRegex.exec(content)) !== null) {
-      const level = match[1].length;
-      const text = match[2].trim();
-      const id = text
-        .toLowerCase()
-        .replace(/[^\w\u4e00-\u9fff\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/(^-|-$)/g, "");
-      items.push({ id, text, level });
+    if (externalHeadings && externalHeadings.length > 0) {
+      setHeadings(externalHeadings);
+    } else if (content) {
+      setHeadings(extractHeadingsFromMDX(content));
     }
-    setHeadings(items);
-  }, [content]);
+  }, [content, externalHeadings]);
 
   useEffect(() => {
     if (headings.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Find the first visible heading
         const visible = entries.filter((e) => e.isIntersecting);
         if (visible.length > 0) {
           setActiveId(visible[0].target.id);

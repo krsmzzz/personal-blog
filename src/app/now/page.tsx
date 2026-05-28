@@ -40,7 +40,7 @@ export default function NowPage() {
         </p>
       </div>
 
-      <div className="mx-auto max-w-2xl space-y-16">
+      <div className="max-w-2xl space-y-16">
         {/* Building */}
         <section>
           <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">

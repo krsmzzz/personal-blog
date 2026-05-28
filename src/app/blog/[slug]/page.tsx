@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { fetchPostBySlug, fetchAllPosts } from "@/lib/content-bridge";
 import { MDXContent } from "@/components/mdx/mdx-content";
 import { PortableTextContent } from "@/components/mdx/portable-text";
-import { TableOfContents } from "@/components/mdx/table-of-contents";
+import { TableOfContents, type TOCItem } from "@/components/mdx/table-of-contents";
 import { ReadingProgress } from "@/components/mdx/reading-progress";
 
 interface Props {
@@ -90,7 +90,26 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
             <aside className="hidden w-48 shrink-0 lg:block">
               <div className="sticky top-28">
-                <TableOfContents content={isSanity ? "" : post.content} />
+                <TableOfContents
+                  content={isSanity ? undefined : post.content}
+                  headings={
+                    isSanity
+                      ? (() => {
+                          const blocks = (post as unknown as { _sanityBody: Array<{ style?: string; children?: Array<{ text?: string }> }> })._sanityBody;
+                          return blocks
+                            .filter((b) => b.style === "h2" || b.style === "h3")
+                            .map((b) => {
+                              const text = b.children?.[0]?.text || "";
+                              return {
+                                id: text.toLowerCase().replace(/[^\w\u4e00-\u9fff\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/(^-|-$)/g, ""),
+                                text,
+                                level: parseInt(b.style?.replace("h", "") || "2"),
+                              };
+                            });
+                        })()
+                      : undefined
+                  }
+                />
               </div>
             </aside>
           </div>
