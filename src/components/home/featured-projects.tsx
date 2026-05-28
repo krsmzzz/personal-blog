@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import Link from "next/link";
 import { ArrowUpRight, Bot, Shield, Terminal, Mic, type LucideIcon } from "lucide-react";
 import { AnimatedSection, AnimatedItem } from "@/components/ui/animated-section";
@@ -88,10 +88,10 @@ export function FeaturedProjects({ projects: externalProjects }: FeaturedProject
           const c = colorMap[project.color];
           return (
             <AnimatedItem key={project.title}>
-              <motion.div
-                whileHover={{ y: -3 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className={`group relative flex h-full flex-col rounded-xl border border-border/60 bg-card p-7 transition-all duration-300 hover:border-accent-blue/20 hover:shadow-[0_0_30px_-6px_rgba(56,189,248,0.06)] ${c.glow}`}
+              <div
+                
+                
+                className={`group relative flex h-full flex-col rounded-xl border border-border/60 bg-card p-7 transition-all duration-500 hover:-translate-y-0.5 hover:border-accent-blue/20 hover:shadow-[0_0_30px_-6px_rgba(56,189,248,0.06)] ${c.glow}`}
               >
                 <div className="mb-4 flex items-center gap-3">
                   <div
@@ -133,7 +133,7 @@ export function FeaturedProjects({ projects: externalProjects }: FeaturedProject
                     详情 →
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             </AnimatedItem>
           );
         })}

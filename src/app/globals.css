@@ -143,3 +143,98 @@
     @apply font-sans;
   }
 }
+
+/* === Custom Keyframe Animations === */
+
+/* Glow breathing */
+@keyframes glow-primary {
+  0%, 100% { opacity: 0.03; transform: translate(-50%, 0) scale(0.95); }
+  50% { opacity: 0.07; transform: translate(-50%, 0) scale(1.08); }
+}
+@keyframes glow-secondary {
+  0%, 100% { opacity: 0.02; transform: scale(1.05); }
+  50% { opacity: 0.05; transform: scale(0.92); }
+}
+@keyframes glow-tertiary {
+  0%, 100% { opacity: 0.01; }
+  50% { opacity: 0.03; }
+}
+
+/* Floating dots */
+@keyframes float-up {
+  0% { opacity: 0; transform: translateY(0) scale(0); }
+  20% { opacity: 0.5; }
+  80% { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-60px) scale(1); }
+}
+
+/* Terminal scan line */
+@keyframes scan-line {
+  0% { top: -2%; }
+  100% { top: 102%; }
+}
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Fade in up */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll reveal */
+@keyframes reveal {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Utility classes */
+.animate-glow-primary {
+  animation: glow-primary 10s ease-in-out infinite;
+}
+.animate-glow-secondary {
+  animation: glow-secondary 7s ease-in-out infinite;
+  animation-delay: 3s;
+}
+.animate-glow-tertiary {
+  animation: glow-tertiary 8s ease-in-out infinite;
+  animation-delay: 5s;
+}
+.animate-float-up {
+  animation: float-up ease-in-out infinite;
+}
+.animate-scan-line {
+  animation: scan-line 4s linear infinite;
+  animation-delay: 1s;
+}
+.animate-blink {
+  animation: blink 1s steps(1) infinite;
+}
+.animate-fade-in {
+  animation: fade-in-up 0.7s ease-out forwards;
+}
+
+/* Scroll-triggered reveal (IntersectionObserver will toggle .revealed) */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children delay utility */
+.stagger-children > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children > *:nth-child(2) { transition-delay: 80ms; }
+.stagger-children > *:nth-child(3) { transition-delay: 160ms; }
+.stagger-children > *:nth-child(4) { transition-delay: 240ms; }
+.stagger-children > *:nth-child(5) { transition-delay: 320ms; }
+.stagger-children > *:nth-child(6) { transition-delay: 400ms; }
+.stagger-children > *:nth-child(7) { transition-delay: 480ms; }
+.stagger-children > *:nth-child(8) { transition-delay: 560ms; }

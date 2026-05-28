@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+
 import { AnimatedSection, AnimatedItem } from "@/components/ui/animated-section";
 import type { Post } from "@/lib/content";
 
@@ -37,16 +37,16 @@ export function LatestPosts({
       <div className="space-y-8">
         {posts.map((post, i) => (
           <AnimatedItem key={post.slug}>
-            <motion.article whileHover={{ x: 3 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+            <article className="transition-transform duration-300 hover:translate-x-0.5">
               <Link
                 href={`/blog/${post.slug}`}
                 className="group flex gap-5 -mx-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-muted/20"
               >
                 <div className="hidden h-[72px] w-[128px] shrink-0 overflow-hidden rounded-lg border border-border/40 bg-card transition-all duration-500 group-hover:border-accent-blue/15 group-hover:shadow-[inset_0_0_20px_-6px_rgba(56,189,248,0.04)] sm:block">
                   {post.frontmatter.cover ? (
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
+                    <div
+                      
+                      
                       className="relative h-full w-full"
                     >
                       <Image
@@ -56,15 +56,15 @@ export function LatestPosts({
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="128px"
                       />
-                    </motion.div>
+                    </div>
                   ) : (
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
+                    <div
+                      
+                      
                       className="flex h-full w-full items-center justify-center p-3"
                     >
                       <Thumbnail index={i} />
-                    </motion.div>
+                    </div>
                   )}
                 </div>
 
@@ -95,7 +95,7 @@ export function LatestPosts({
                   </div>
                 </div>
               </Link>
-            </motion.article>
+            </article>
           </AnimatedItem>
         ))}
       </div>

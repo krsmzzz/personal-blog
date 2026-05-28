@@ -1,32 +1,7 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-
-const easeOut = [0.16, 1, 0.3, 1] as const;
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.04,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: easeOut,
-    },
-  },
-};
 
 interface AnimatedSectionProps {
   children: React.ReactNode;
@@ -41,17 +16,44 @@ export function AnimatedSection({
   bg,
   as: Component = "section",
 }: AnimatedSectionProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1, rootMargin: "-60px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <Component className={cn("py-28 sm:py-36", bg, className)}>
       <div className="mx-auto max-w-5xl px-6">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
+        <div
+          ref={ref}
+          className={cn(
+            "transition-all duration-700",
+            revealed
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
+          )}
+          style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
         >
-          {children}
-        </motion.div>
+          <div className="stagger-children">
+            {children}
+          </div>
+        </div>
       </div>
     </Component>
   );
@@ -65,8 +67,13 @@ export function AnimatedItem({
   className?: string;
 }) {
   return (
-    <motion.div variants={itemVariants} className={className}>
+    <div
+      className={cn(
+        "reveal-on-scroll",
+        className
+      )}
+    >
       {children}
-    </motion.div>
+    </div>
   );
 }
