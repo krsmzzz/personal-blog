@@ -1,28 +1,20 @@
 /**
  * Unified data layer.
- * Uses Sanity if configured, otherwise falls back to local MDX.
+ * Merges Sanity CMS posts with local MDX posts.
  */
+
 import { getAllPosts as getMdxPosts, getPostBySlug as getMdxPostBySlug } from "./content";
-
-// Lazy Sanity imports — only loaded when env vars are set
-async function getSanityPosts() {
-  const { getAllPosts } = await import("./sanity/api");
-  return getAllPosts();
-}
-
-async function getSanityPostBySlug(slug: string) {
-  const { getPostBySlug } = await import("./sanity/api");
-  return getPostBySlug(slug);
-}
+import type { Post } from "./content";
 
 const isSanityConfigured = () =>
   !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
   process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== "your-project-id";
 
-export async function fetchAllPosts() {
-  if (isSanityConfigured()) {
-    const posts = await getSanityPosts();
-    return posts.map((p) => ({
+async function getSanityPostsSafe() {
+  try {
+    const { getAllPosts } = await import("./sanity/api");
+    const posts = await getAllPosts();
+    return posts.map((p: { slug: string; title: string; publishedAt: string; description?: string; tags?: string[]; cover?: string; body: unknown; readingTime: number }) => ({
       slug: p.slug,
       frontmatter: {
         title: p.title,
@@ -35,13 +27,15 @@ export async function fetchAllPosts() {
       readingTime: p.readingTime > 0 ? `${p.readingTime} min read` : "1 min read",
       _sanityBody: p.body,
     }));
+  } catch {
+    return [];
   }
-  return getMdxPosts();
 }
 
-export async function fetchPostBySlug(slug: string) {
-  if (isSanityConfigured()) {
-    const post = await getSanityPostBySlug(slug);
+async function getSanityPostBySlugSafe(slug: string) {
+  try {
+    const { getPostBySlug } = await import("./sanity/api");
+    const post = await getPostBySlug(slug);
     if (!post) return null;
     return {
       slug: post.slug,
@@ -56,6 +50,27 @@ export async function fetchPostBySlug(slug: string) {
       readingTime: post.readingTime > 0 ? `${post.readingTime} min read` : "1 min read",
       _sanityBody: post.body,
     };
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchAllPosts(): Promise<Post[]> {
+  const mdxPosts = getMdxPosts();
+  if (isSanityConfigured()) {
+    const sanityPosts = await getSanityPostsSafe();
+    // Merge: Sanity posts first, then MDX (dedup by slug)
+    const sanitySlugs = new Set(sanityPosts.map((p: Post) => p.slug));
+    const filteredMdx = mdxPosts.filter((p) => !sanitySlugs.has(p.slug));
+    return [...sanityPosts, ...filteredMdx];
+  }
+  return mdxPosts;
+}
+
+export async function fetchPostBySlug(slug: string) {
+  if (isSanityConfigured()) {
+    const sanityPost = await getSanityPostBySlugSafe(slug);
+    if (sanityPost) return sanityPost;
   }
   return getMdxPostBySlug(slug);
 }
