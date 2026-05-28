@@ -37,12 +37,12 @@ export function LatestPosts({
       <div className="space-y-8">
         {posts.map((post, i) => (
           <AnimatedItem key={post.slug}>
-            <motion.article whileHover={{ x: 2 }} transition={{ duration: 0.2 }}>
+            <motion.article whileHover={{ x: 3 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}>
               <Link
                 href={`/blog/${post.slug}`}
                 className="group flex gap-5 -mx-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-muted/20"
               >
-                <div className="hidden h-[72px] w-[128px] shrink-0 overflow-hidden rounded-lg border border-border/40 bg-card transition-all duration-300 group-hover:border-accent-blue/20 sm:block">
+                <div className="hidden h-[72px] w-[128px] shrink-0 overflow-hidden rounded-lg border border-border/40 bg-card transition-all duration-500 group-hover:border-accent-blue/15 group-hover:shadow-[inset_0_0_20px_-6px_rgba(56,189,248,0.04)] sm:block">
                   {post.frontmatter.cover ? (
                     <motion.div
                       whileHover={{ scale: 1.02 }}

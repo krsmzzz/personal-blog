@@ -50,9 +50,9 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-500",
+          "sticky top-0 z-50 w-full transition-all duration-700",
           scrolled
-            ? "border-b border-border bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/50"
+            ? "border-b border-border bg-background/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/50"
             : "border-b border-transparent bg-transparent"
         )}
       >

@@ -29,7 +29,7 @@ export default async function BlogPage() {
         {posts.map((post, i) => (
           <article key={post.slug}>
             <Link href={`/blog/${post.slug}`} className="group flex flex-col gap-5 -mx-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-muted/20 sm:flex-row">
-              <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-xl border border-border/40 bg-card transition-all duration-300 group-hover:border-accent-blue/20 sm:h-28 sm:w-48">
+              <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-xl border border-border/40 bg-card transition-all duration-500 group-hover:border-accent-blue/15 group-hover:shadow-[inset_0_0_20px_-6px_rgba(56,189,248,0.04)] sm:h-28 sm:w-48">
                 {post.frontmatter.cover ? (
                   <Image src={post.frontmatter.cover} alt={post.frontmatter.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 640px) 100vw, 192px" />
                 ) : (

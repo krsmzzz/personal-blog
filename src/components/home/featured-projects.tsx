@@ -89,9 +89,9 @@ export function FeaturedProjects({ projects: externalProjects }: FeaturedProject
           return (
             <AnimatedItem key={project.title}>
               <motion.div
-                whileHover={{ y: -2 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className={`group relative flex h-full flex-col rounded-xl border border-border bg-card p-7 transition-all duration-300 hover:border-border/40 ${c.glow}`}
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className={`group relative flex h-full flex-col rounded-xl border border-border/60 bg-card p-7 transition-all duration-300 hover:border-accent-blue/20 hover:shadow-[0_0_30px_-6px_rgba(56,189,248,0.06)] ${c.glow}`}
               >
                 <div className="mb-4 flex items-center gap-3">
                   <div

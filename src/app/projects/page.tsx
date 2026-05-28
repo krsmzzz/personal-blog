@@ -41,7 +41,7 @@ export default async function ProjectsPage() {
             <Link
               key={p.slug}
               href={`/projects/${p.slug}`}
-              className="group relative flex flex-col rounded-xl border border-border bg-card p-7 transition-all duration-300 hover:border-border/40 hover:shadow-[0_0_20px_-4px_rgba(56,189,248,0.06)]"
+              className="group relative flex flex-col rounded-xl border border-border/60 bg-card p-7 transition-all duration-500 hover:border-accent-blue/20 hover:shadow-[0_0_30px_-6px_rgba(56,189,248,0.06)] hover:-translate-y-0.5"
             >
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-sky-500/15 bg-sky-500/5 transition-all duration-300 group-hover:border-sky-500/25 group-hover:bg-sky-500/8">
