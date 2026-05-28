@@ -26,7 +26,7 @@ function getGridClass(count: number): string {
 }
 
 function getImageClass(count: number, index: number): string {
-  if (count === 1) return "aspect-[4/3]";
+  if (count === 1) return "";
   if (count === 3) {
     if (index === 0) return "aspect-square row-span-2";
     return "aspect-square";
@@ -78,17 +78,22 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
                 onClick={() => setLightbox({ url: img.url!, index: i })}
                 className={`group relative w-full cursor-zoom-in overflow-hidden rounded-lg ${getImageClass(count, i)}`}
               >
-                <Image
-                  src={img.url!}
-                  alt={img.alt || ""}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes={
-                    count === 1
-                      ? "(max-width: 640px) 100vw, 500px"
-                      : "(max-width: 640px) 50vw, 250px"
-                  }
-                />
+                {count === 1 ? (
+                  <img
+                    src={img.url!}
+                    alt={img.alt || ""}
+                    className="w-full transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                ) : (
+                  <Image
+                    src={img.url!}
+                    alt={img.alt || ""}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 50vw, 250px"
+                  />
+                )}
                 <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/15" />
               </button>
             ))}
@@ -100,52 +105,61 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
         </time>
       </div>
 
-      {/* Fullscreen Lightbox */}
       {lightbox && (
-        <div
-          className="fixed inset-0 z-50 bg-black"
-          onClick={() => setLightbox(null)}
-        >
-          <button
+        <>
+          {/* Mask overlay */}
+          <div
+            className="fixed inset-0 z-40 bg-black/90 backdrop-blur-xl"
             onClick={() => setLightbox(null)}
-            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-            </svg>
-          </button>
+          />
 
-          <div className="absolute left-4 top-4 z-10 rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-white/50 backdrop-blur-sm">
-            {lightbox.index + 1} / {count}
-          </div>
-
-          {lightbox.index > 0 && (
+          {/* Lightbox controls + image */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-8 pointer-events-none">
+            {/* Close */}
             <button
-              onClick={(e) => { e.stopPropagation(); setLightbox({ url: images[lightbox.index - 1].url!, index: lightbox.index - 1 }); }}
-              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+              onClick={() => setLightbox(null)}
+              className="pointer-events-auto absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m15 18-6-6 6-6"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
             </button>
-          )}
-          {lightbox.index < count - 1 && (
-            <button
-              onClick={(e) => { e.stopPropagation(); setLightbox({ url: images[lightbox.index + 1].url!, index: lightbox.index + 1 }); }}
-              className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-          )}
 
-          <div className="flex h-full w-full items-center justify-center p-8" onClick={(e) => e.stopPropagation()}>
-            <Image
-              src={lightbox.url}
-              alt=""
-              fill
-              className="object-contain"
-              sizes="100vw"
-            />
+            {/* Counter */}
+            <div className="pointer-events-auto absolute left-4 top-4 z-10 rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-white/50 backdrop-blur-sm">
+              {lightbox.index + 1} / {count}
+            </div>
+
+            {/* Prev */}
+            {lightbox.index > 0 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setLightbox({ url: images[lightbox.index - 1].url!, index: lightbox.index - 1 }); }}
+                className="pointer-events-auto absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+            )}
+
+            {/* Next */}
+            {lightbox.index < count - 1 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setLightbox({ url: images[lightbox.index + 1].url!, index: lightbox.index + 1 }); }}
+                className="pointer-events-auto absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            )}
+
+            {/* Image */}
+            <div className="pointer-events-auto z-10 max-h-full max-w-full" onClick={(e) => e.stopPropagation()}>
+              <img
+                src={lightbox.url}
+                alt=""
+                className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain"
+              />
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
