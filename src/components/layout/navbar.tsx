@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/blog", label: "文章" },
   { href: "/projects", label: "项目" },
   { href: "/ideas", label: "想法" },
+  { href: "/now", label: "近况" },
   { href: "/about", label: "关于" },
 ];
 

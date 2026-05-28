@@ -66,7 +66,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="mx-auto max-w-5xl px-6 py-24 sm:py-28">
           <header className="mb-12">
             <Link href="/blog" className="mb-6 inline-flex text-sm text-muted-foreground/60 transition-colors duration-200 hover:text-accent-blue">
-              ← 文章
+              ← Blog
             </Link>
             <div className="flex flex-wrap items-center gap-2 mb-4">
               {post.frontmatter.tags?.map((tag) => (
