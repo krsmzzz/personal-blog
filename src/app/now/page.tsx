@@ -27,7 +27,7 @@ export default function NowPage() {
         <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground/70">当前专注的方向 — 2025 年 5 月更新。</p>
       </div>
 
-      <div className="mx-auto max-w-2xl space-y-16">
+      <div className="max-w-2xl space-y-16">
         <section>
           <h2 className="mb-6 font-mono text-[10px] tracking-[0.15em] text-muted-foreground/40 uppercase">正在构建</h2>
           <div className="space-y-4">

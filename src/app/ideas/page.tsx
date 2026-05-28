@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fetchAllIdeas } from "@/lib/content-bridge";
+import { getAllIdeas } from "@/lib/sanity/api";
 import { IdeaCard } from "@/components/ideas/idea-card";
 
 export const metadata: Metadata = {
@@ -8,8 +8,26 @@ export const metadata: Metadata = {
 };
 
 export default async function IdeasPage() {
-  const ideas = await fetchAllIdeas();
-  const hasIdeas = ideas.length > 0;
+  let ideas: Awaited<ReturnType<typeof getAllIdeas>> = [];
+  try {
+    ideas = await getAllIdeas();
+  } catch {}
+
+  const displayIdeas = ideas.map((i) => ({
+    slug: i.slug,
+    frontmatter: {
+      title: i.title,
+      date: i.date,
+      excerpt: i.excerpt,
+      tags: i.tags,
+      coverImage: i.coverImage,
+      quote: i.quote,
+      links: i.links,
+      featured: i.featured,
+    },
+  }));
+
+  const hasIdeas = displayIdeas.length > 0;
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-28 sm:py-36">
@@ -22,7 +40,7 @@ export default async function IdeasPage() {
         <div className="relative">
           <div className="absolute left-[19px] top-3 bottom-3 w-px lg:left-1/2 lg:-translate-x-px" style={{ background: "linear-gradient(to bottom, rgba(56,189,248,0.15), rgba(56,189,248,0.04), rgba(56,189,248,0.15))" }} />
           <div className="space-y-16">
-            {ideas.map((idea) => (
+            {displayIdeas.map((idea) => (
               <div key={idea.slug} className="relative flex items-start gap-8 lg:gap-0">
                 <div className="relative z-10 flex shrink-0 items-center gap-4 lg:absolute lg:left-1/2 lg:-translate-x-[calc(100%+32px)] lg:flex-row-reverse lg:text-right">
                   <div className="relative flex size-[10px] shrink-0 items-center justify-center lg:order-last lg:translate-x-[5px]">
