@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#09090b"/>
+  <g font-family="monospace" font-size="14">
+    <text x="60" y="80" fill="#52525b">01</text>
+    <text x="100" y="80" fill="#71717a">import</text>
+    <text x="170" y="80" fill="#a1a1aa">{'{'}</text>
+    <text x="185" y="80" fill="#38bdf8" opacity="0.6">type</text>
+    <text x="230" y="80" fill="#a1a1aa">{'}'}</text>
+    <text x="245" y="80" fill="#71717a">from</text>
+    <text x="290" y="80" fill="#a1a1aa">'./types'</text>
+    <text x="60" y="110" fill="#52525b">02</text>
+    <text x="60" y="140" fill="#52525b">03</text>
+    <text x="100" y="140" fill="#71717a">export</text>
+    <text x="170" y="140" fill="#71717a">async</text>
+    <text x="230" y="140" fill="#71717a">function</text>
+    <text x="310" y="140" fill="#38bdf8" opacity="0.6">buildSystem</text>
+    <text x="420" y="140" fill="#a1a1aa">()</text>
+    <text x="60" y="170" fill="#52525b">04</text>
+    <text x="100" y="170" fill="#a1a1aa">{'{'}</text>
+    <text x="60" y="200" fill="#52525b">05</text>
+    <text x="120" y="200" fill="#71717a">const</text>
+    <text x="180" y="200" fill="#a1a1aa">config</text>
+    <text x="240" y="200" fill="#a1a1aa">=</text>
+    <text x="260" y="200" fill="#71717a">await</text>
+    <text x="320" y="200" fill="#a1a1aa">loadConfig()</text>
+    <text x="60" y="230" fill="#52525b">06</text>
+    <text x="120" y="230" fill="#71717a">return</text>
+    <text x="190" y="230" fill="#38bdf8" opacity="0.4">{'<System />'}</text>
+    <text x="60" y="260" fill="#52525b">07</text>
+    <text x="100" y="260" fill="#a1a1aa">{'}'}</text>
+  </g>
+  <rect x="50" y="320" width="800" height="280" rx="12" fill="#111111" stroke="#27272a" stroke-width="1"/>
+  <text x="80" y="360" font-family="monospace" font-size="12" fill="#52525b">// Type-safe builder pattern</text>
+  <text x="80" y="390" font-family="monospace" font-size="12" fill="#a1a1aa">const result = await pipeline</text>
+  <text x="80" y="420" font-family="monospace" font-size="12" fill="#a1a1aa">  .use(authMiddleware)</text>
+  <text x="80" y="450" font-family="monospace" font-size="12" fill="#a1a1aa">  .use(rateLimiter)</text>
+  <text x="80" y="480" font-family="monospace" font-size="12" fill="#a1a1aa">  .handle(request)</text>
+  <text x="80" y="540" font-family="monospace" font-size="12" fill="#38bdf8" opacity="0.5">  ✓ type-check passed</text>
+</svg>

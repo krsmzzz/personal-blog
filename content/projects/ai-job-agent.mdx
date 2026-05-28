@@ -1,0 +1,31 @@
+---
+title: "AI 自动求职助手"
+description: "聚合多平台职位信息，AI 自动匹配简历与岗位，一键批量投递，提升求职效率 10 倍。"
+tags: ["Next.js", "Python", "LLM", "Chrome Extension"]
+github: "https://github.com"
+demo: "https://demo.example.com"
+year: "2025"
+featured: true
+published: true
+---
+
+## 项目背景
+
+在求职过程中，重复性的岗位搜索和简历投递占据了大量时间。传统方式需要在多个平台手动搜索、筛选、填写、提交——效率极低。
+
+## 核心功能
+
+1. **多平台聚合** — 同时抓取 Boss 直聘、拉勾、LinkedIn 等平台的职位信息
+2. **AI 智能匹配** — 基于简历内容与岗位描述的语义匹配，精准度比关键词匹配高 40%
+3. **一键批量投递** — Chrome Extension 自动填写表单，批量提交
+
+## 技术架构
+
+- **前端**: Next.js + TailwindCSS，Chrome Extension
+- **后端**: Python FastAPI + Celery 任务队列
+- **AI**: GPT-4 语义匹配 + 自定义打分模型
+- **数据库**: PostgreSQL + Redis 缓存
+
+## 经验总结
+
+最大的挑战不是算法，而是多平台反爬策略的对抗。最终采用了浏览器扩展方案，从源头上绕过了大量反爬逻辑。

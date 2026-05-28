@@ -1,0 +1,43 @@
+---
+title: "从零构建类型安全的 API 客户端"
+date: "2025-04-02"
+cover: /images/blog/architecture-dark.svg
+description: "如何利用 TypeScript 的类型系统设计一个编译时即可捕获错误的 API 客户端。"
+tags: ["TypeScript", "Architecture"]
+featured: true
+published: true
+---
+
+## 出发点
+
+大多数 API 客户端的问题不是功能不够，而是类型信息在传输过程中丢失了。
+
+## 设计思路
+
+```typescript
+// 类型定义
+type API = {
+  "/users": {
+    GET: { response: User[] };
+    POST: { body: CreateUser; response: User };
+  };
+  "/users/:id": {
+    GET: { response: User };
+    PUT: { body: UpdateUser; response: User };
+  };
+};
+```
+
+## 实现要点
+
+1. **路径推导**：利用模板字面量类型推导路由参数
+2. **请求体校验**：在编译时确保请求体类型匹配
+3. **响应类型推导**：根据路径和方法自动推导响应类型
+
+<Callout type="warning">
+  使用条件类型和递归类型时需要小心 TypeScript 的性能。超过 200+ 路由的复杂 API 可能需要使用类型生成脚本替代纯类型推导。
+</Callout>
+
+## 最佳实践
+
+结合 Zod 进行运行时校验，通过 `z.infer` 与类型系统无缝衔接。在 Node.js 和浏览器端共享同一套类型定义。
