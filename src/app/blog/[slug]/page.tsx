@@ -96,12 +96,13 @@ export default async function BlogPostPage({ params }: Props) {
                     isSanity
                       ? (() => {
                           const blocks = (post as unknown as { _sanityBody: Array<{ style?: string; children?: Array<{ text?: string }> }> })._sanityBody;
+                          const slugify = (t: string) => t.toLowerCase().replace(/[^\w\u4e00-\u9fff\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/(^-|-$)/g, "");
                           return blocks
                             .filter((b) => b.style === "h2" || b.style === "h3")
                             .map((b) => {
-                              const text = b.children?.[0]?.text || "";
+                              const text = (b.children || []).map((c) => c.text || "").join("");
                               return {
-                                id: text.toLowerCase().replace(/[^\w\u4e00-\u9fff\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/(^-|-$)/g, ""),
+                                id: slugify(text),
                                 text,
                                 level: parseInt(b.style?.replace("h", "") || "2"),
                               };
