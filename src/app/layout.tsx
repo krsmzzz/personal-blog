@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "ruikang",
-    template: "%s | ruikang",
+    default: "王瑞康的博客",
+    template: "%s | 王瑞康的博客",
   },
   description: "个人博客与作品集。",
 };

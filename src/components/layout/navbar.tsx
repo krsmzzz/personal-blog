@@ -63,7 +63,7 @@ export function Navbar() {
             className="flex items-center gap-2 text-[15px] font-medium tracking-tight text-foreground transition-opacity duration-200 hover:opacity-50"
           >
             <span className="size-1.5 rounded-full bg-accent-blue" />
-            ruikang
+            王瑞康的博客
           </Link>
 
           {/* Desktop Nav */}
