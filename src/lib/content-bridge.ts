@@ -1,3 +1,4 @@
+import type { PortableTextBlock } from "@portabletext/react";
 /**
  * Unified data layer.
  * Merges Sanity CMS posts with local MDX posts.
@@ -162,4 +163,98 @@ export async function fetchAllThoughts(): Promise<{ content: string; date: strin
     }
   }
   return [];
+}
+
+// ----- Ideas -----
+
+export interface IdeaFrontmatter {
+  title: string;
+  date: string;
+  excerpt?: string;
+  tags?: string[];
+  coverImage?: string;
+  galleryImages?: Array<{ url?: string; alt?: string; caption?: string }>;
+  quote?: string;
+  links?: Array<{ label?: string; url?: string }>;
+  featured?: boolean;
+}
+
+export interface IdeaPost {
+  slug: string;
+  frontmatter: IdeaFrontmatter;
+  content: string;
+  _sanityBody?: PortableTextBlock[];
+}
+
+async function getSanityIdeasSafe(): Promise<IdeaPost[]> {
+  try {
+    const { getAllIdeas } = await import("./sanity/api");
+    const ideas = await getAllIdeas();
+    return ideas.map((i) => ({
+      slug: i.slug,
+      frontmatter: {
+        title: i.title,
+        date: i.date,
+        excerpt: i.excerpt,
+        tags: i.tags,
+        coverImage: i.coverImage,
+        galleryImages: i.galleryImages?.map((g) => ({
+          url: g.asset?.url,
+          alt: g.alt,
+          caption: g.caption,
+        })),
+        quote: i.quote,
+        links: i.links,
+        featured: i.featured,
+      },
+      content: "",
+      _sanityBody: i.body,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+async function getSanityIdeaBySlugSafe(slug: string): Promise<IdeaPost | null> {
+  try {
+    const { getIdeaBySlug } = await import("./sanity/api");
+    const idea = await getIdeaBySlug(slug);
+    if (!idea) return null;
+    return {
+      slug: idea.slug,
+      frontmatter: {
+        title: idea.title,
+        date: idea.date,
+        excerpt: idea.excerpt,
+        tags: idea.tags,
+        coverImage: idea.coverImage,
+        galleryImages: idea.galleryImages?.map((g) => ({
+          url: g.asset?.url,
+          alt: g.alt,
+          caption: g.caption,
+        })),
+        quote: idea.quote,
+        links: idea.links,
+        featured: idea.featured,
+      },
+      content: "",
+      _sanityBody: idea.body,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchAllIdeas(): Promise<IdeaPost[]> {
+  if (isSanityConfigured()) {
+    return getSanityIdeasSafe();
+  }
+  return [];
+}
+
+export async function fetchIdeaBySlug(slug: string): Promise<IdeaPost | null> {
+  if (isSanityConfigured()) {
+    return getSanityIdeaBySlugSafe(slug);
+  }
+  return null;
 }

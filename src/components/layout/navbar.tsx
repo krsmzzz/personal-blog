@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 const navLinks = [
   { href: "/blog", label: "文章" },
   { href: "/projects", label: "项目" },
-  { href: "/now", label: "近况" },
+  { href: "/ideas", label: "想法" },
   { href: "/about", label: "关于" },
 ];
 

@@ -37,3 +37,29 @@ export interface Thought {
   content: string;
   date: string;
 }
+
+export interface IdeaImage {
+  asset?: { url?: string };
+  alt?: string;
+  caption?: string;
+}
+
+export interface IdeaLink {
+  label?: string;
+  url?: string;
+}
+
+export interface Idea {
+  _id: string;
+  title: string;
+  slug: string;
+  date: string;
+  excerpt?: string;
+  tags?: string[];
+  coverImage?: string;
+  galleryImages?: IdeaImage[];
+  body: PortableTextBlock[];
+  quote?: string;
+  links?: IdeaLink[];
+  featured?: boolean;
+}
