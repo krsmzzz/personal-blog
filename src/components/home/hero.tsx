@@ -166,10 +166,8 @@ function FloatingDots() {
 
 // === Main Hero ===
 export function Hero() {
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
   }, []);
   return (
     <section className="relative flex min-h-[85vh] flex-col justify-center overflow-hidden bg-background pt-28 pb-24 sm:pt-32 sm:pb-28">
@@ -231,8 +229,8 @@ export function Hero() {
       <div className="relative z-10 mx-auto w-full max-w-5xl px-6">
         <motion.div
           variants={stagger}
-          initial={mounted ? "hidden" : false}
-          animate={mounted ? "visible" : "visible"}
+          initial="hidden"
+          animate="visible"
           className="flex flex-col gap-14"
         >
           {/* Status badge + Title */}

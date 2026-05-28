@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -42,17 +41,12 @@ export function AnimatedSection({
   bg,
   as: Component = "section",
 }: AnimatedSectionProps) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
     <Component className={cn("py-28 sm:py-36", bg, className)}>
       <div className="mx-auto max-w-5xl px-6">
         <motion.div
           variants={containerVariants}
-          initial={mounted ? "hidden" : false}
+          initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
         >
