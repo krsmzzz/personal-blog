@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight, Bot, Shield, Terminal, Mic } from "lucide-react";
+import { ArrowUpRight, Bot, Shield, Terminal, Mic, type LucideIcon } from "lucide-react";
 import { AnimatedSection, AnimatedItem } from "@/components/ui/animated-section";
 
 const GithubIcon = ({ className }: { className?: string }) => (
@@ -11,77 +11,59 @@ const GithubIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const projects = [
-  {
-    title: "AI 自动求职助手",
-    description:
-      "聚合多平台职位信息，AI 自动匹配简历与岗位，一键批量投递，求职效率提升 10 倍。",
-    tags: ["Next.js", "Python", "LLM", "Chrome Extension"],
-    icon: Bot,
-    color: "sky",
-    github: "https://github.com",
-    demo: "https://demo.example.com",
-  },
-  {
-    title: "银行反洗钱系统",
-    description:
-      "基于规则引擎与机器学习的 AML 交易监控平台，实时风控、可疑交易识别与监管报送。",
-    tags: ["Java", "Spring Boot", "Flink", "PostgreSQL"],
-    icon: Shield,
-    color: "slate",
-    github: "https://github.com",
-    demo: null,
-  },
-  {
-    title: "OpenClaw 网关",
-    description:
-      "轻量级 API 网关，支持多协议路由、限流熔断、灰度发布，专为微服务架构设计。",
-    tags: ["Go", "gRPC", "Redis", "Kubernetes"],
-    icon: Terminal,
-    color: "cyan",
-    github: "https://github.com",
-    demo: "https://demo.example.com",
-  },
-  {
-    title: "AI 面试助手",
-    description:
-      "模拟真实面试场景，AI 根据简历生成个性化问题，实时语音交互并提供评分反馈。",
-    tags: ["TypeScript", "Whisper", "GPT-4", "WebRTC"],
-    icon: Mic,
-    color: "indigo",
-    github: null,
-    demo: "https://demo.example.com",
-  },
-];
-
-const colorMap: Record<string, { border: string; bg: string; icon: string; glow: string }> = {
-  sky: {
-    border: "border-sky-500/15 group-hover:border-sky-500/25",
-    bg: "bg-sky-500/5 group-hover:bg-sky-500/8",
-    icon: "text-sky-400/60 group-hover:text-sky-400",
-    glow: "group-hover:shadow-[0_0_20px_-4px_rgba(56,189,248,0.06)]",
-  },
-  slate: {
-    border: "border-slate-500/15 group-hover:border-slate-500/25",
-    bg: "bg-slate-500/5 group-hover:bg-slate-500/8",
-    icon: "text-slate-400/60 group-hover:text-slate-400",
-    glow: "group-hover:shadow-[0_0_20px_-4px_rgba(148,163,184,0.06)]",
-  },
-  cyan: {
-    border: "border-cyan-500/15 group-hover:border-cyan-500/25",
-    bg: "bg-cyan-500/5 group-hover:bg-cyan-500/8",
-    icon: "text-cyan-400/60 group-hover:text-cyan-400",
-    glow: "group-hover:shadow-[0_0_20px_-4px_rgba(34,211,238,0.06)]",
-  },
-  indigo: {
-    border: "border-indigo-500/15 group-hover:border-indigo-500/25",
-    bg: "bg-indigo-500/5 group-hover:bg-indigo-500/8",
-    icon: "text-indigo-400/60 group-hover:text-indigo-400",
-    glow: "group-hover:shadow-[0_0_20px_-4px_rgba(129,140,248,0.06)]",
-  },
+const iconSlugMap: Record<string, LucideIcon> = {
+  "ai-job-agent": Bot,
+  "aml-system": Shield,
+  "openclaw-gateway": Terminal,
+  "ai-interviewer": Mic,
 };
 
-export function FeaturedProjects() {
+const colorSlugMap: Record<string, string> = {
+  "ai-job-agent": "sky",
+  "aml-system": "slate",
+  "openclaw-gateway": "cyan",
+  "ai-interviewer": "indigo",
+};
+
+const colorMap: Record<string, { border: string; bg: string; icon: string; glow: string }> = {
+  sky: { border: "border-sky-500/15 group-hover:border-sky-500/25", bg: "bg-sky-500/5 group-hover:bg-sky-500/8", icon: "text-sky-400/60 group-hover:text-sky-400", glow: "group-hover:shadow-[0_0_20px_-4px_rgba(56,189,248,0.06)]" },
+  slate: { border: "border-slate-500/15 group-hover:border-slate-500/25", bg: "bg-slate-500/5 group-hover:bg-slate-500/8", icon: "text-slate-400/60 group-hover:text-slate-400", glow: "group-hover:shadow-[0_0_20px_-4px_rgba(148,163,184,0.06)]" },
+  cyan: { border: "border-cyan-500/15 group-hover:border-cyan-500/25", bg: "bg-cyan-500/5 group-hover:bg-cyan-500/8", icon: "text-cyan-400/60 group-hover:text-cyan-400", glow: "group-hover:shadow-[0_0_20px_-4px_rgba(34,211,238,0.06)]" },
+  indigo: { border: "border-indigo-500/15 group-hover:border-indigo-500/25", bg: "bg-indigo-500/5 group-hover:bg-indigo-500/8", icon: "text-indigo-400/60 group-hover:text-indigo-400", glow: "group-hover:shadow-[0_0_20px_-4px_rgba(129,140,248,0.06)]" },
+};
+
+interface ProjectListItem {
+  slug: string;
+  frontmatter: {
+    title: string;
+    description: string;
+    tags?: string[];
+    github?: string;
+    demo?: string;
+  };
+}
+
+interface FeaturedProjectsProps {
+  projects?: ProjectListItem[];
+}
+
+export function FeaturedProjects({ projects: externalProjects }: FeaturedProjectsProps) {
+  const projects = externalProjects?.map((p) => {
+    const slug = p.slug;
+    return {
+      title: p.frontmatter.title,
+      description: p.frontmatter.description,
+      tags: p.frontmatter.tags || [],
+      icon: iconSlugMap[slug] || Terminal,
+      color: colorSlugMap[slug] || "sky",
+      github: p.frontmatter.github || null,
+      demo: p.frontmatter.demo || null,
+      slug,
+    };
+  });
+
+  if (!projects || projects.length === 0) return null;
+
   return (
     <AnimatedSection bg="bg-surface-1">
       <AnimatedItem className="mb-16">
@@ -94,6 +76,9 @@ export function FeaturedProjects() {
               作品
             </h2>
           </div>
+          <Link href="/projects" className="text-sm font-medium text-muted-foreground/60 transition-colors duration-200 hover:text-accent-blue">
+            全部项目 →
+          </Link>
         </div>
       </AnimatedItem>
 
@@ -112,9 +97,7 @@ export function FeaturedProjects() {
                   <div
                     className={`flex size-9 shrink-0 items-center justify-center rounded-lg border transition-all duration-300 ${c.border} ${c.bg}`}
                   >
-                    <Icon
-                      className={`size-4 transition-all duration-300 ${c.icon}`}
-                    />
+                    <Icon className={`size-4 transition-all duration-300 ${c.icon}`} />
                   </div>
                   <h3 className="text-base font-semibold tracking-tight text-foreground">
                     {project.title}
@@ -127,10 +110,7 @@ export function FeaturedProjects() {
 
                 <div className="mb-6 flex flex-wrap gap-1.5">
                   {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-md border border-border px-2 py-0.5 font-mono text-[10px] tracking-wide text-muted-foreground/60"
-                    >
+                    <span key={tag} className="rounded-md border border-border px-2 py-0.5 font-mono text-[10px] tracking-wide text-muted-foreground/60">
                       {tag}
                     </span>
                   ))}
@@ -138,26 +118,20 @@ export function FeaturedProjects() {
 
                 <div className="flex items-center gap-5">
                   {project.github && (
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors duration-200 hover:text-foreground"
-                    >
+                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-muted-foreground/50 transition-colors duration-200 hover:text-foreground">
                       <GithubIcon className="size-3.5" />
                       GitHub
-                      <ArrowUpRight className="size-3 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:-translate-y-px group-hover:translate-x-px" />
                     </a>
                   )}
                   {project.demo && (
-                    <Link
-                      href={project.demo}
-                      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors duration-200 hover:text-accent-blue"
-                    >
-                      Live Demo
-                      <ArrowUpRight className="size-3 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:-translate-y-px group-hover:translate-x-px" />
-                    </Link>
+                    <a href={project.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-muted-foreground/50 transition-colors duration-200 hover:text-accent-blue">
+                      Demo
+                      <ArrowUpRight className="size-3" />
+                    </a>
                   )}
+                  <Link href={`/projects/${project.slug}`} className="ml-auto text-xs text-muted-foreground/40 transition-colors duration-200 hover:text-foreground">
+                    详情 →
+                  </Link>
                 </div>
               </motion.div>
             </AnimatedItem>

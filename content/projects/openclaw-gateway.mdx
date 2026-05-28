@@ -1,0 +1,38 @@
+---
+title: "OpenClaw 网关"
+description: "轻量级 API 网关，支持多协议路由、限流熔断、灰度发布，专为微服务架构设计。"
+tags: ["Go", "gRPC", "Redis", "Kubernetes"]
+github: "https://github.com"
+demo: "https://demo.example.com"
+year: "2024"
+featured: true
+published: true
+---
+
+## 项目背景
+
+在微服务架构中，API 网关是所有流量的入口。现有的网关方案（Kong、APISIX）功能强大但部署复杂。OpenClaw 旨在提供一个极简、高性能的替代方案。
+
+## 核心功能
+
+1. **多协议路由** — 支持 HTTP、gRPC、WebSocket 的统一路由
+2. **限流熔断** — 基于 Token Bucket 的限流 + 自适应熔断
+3. **灰度发布** — 支持按比例、按 Header 的流量分流
+4. **热更新** — 配置变更无需重启
+
+## 技术架构
+
+- **核心**: Go 1.22 + 自定义路由树
+- **配置**: etcd 实时同步
+- **部署**: Kubernetes + Helm Chart
+- **监控**: Prometheus + Grafana
+
+## 性能指标
+
+- 单实例 50k QPS（HTTP）
+- P99 延迟 < 2ms
+- 内存占用 < 50MB
+
+## 经验总结
+
+网关的核心不是功能多，而是稳定。花了 60% 的时间在错误处理和边界条件上，这在我看来是正确的比例。
