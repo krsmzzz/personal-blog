@@ -114,7 +114,7 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
                   <img
                     src={img.url!}
                     alt={img.alt || ""}
-                    className="w-full transition-transform duration-500 group-hover:scale-105"
+                    className="w-auto max-h-48 transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                   />
                 ) : (
