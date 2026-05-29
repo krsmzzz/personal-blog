@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import type { IdeaFrontmatter } from "@/lib/content-bridge";
 
@@ -50,6 +51,37 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  // ESC key to close
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "ArrowLeft" && lightbox.index > 0) {
+        const prev = galleryImages?.filter((g) => g.url)[lightbox.index - 1];
+        if (prev?.url) setLightbox({ url: prev.url, index: lightbox.index - 1 });
+      }
+      if (e.key === "ArrowRight") {
+        const imgs = galleryImages?.filter((g) => g.url) || [];
+        if (lightbox.index < imgs.length - 1) {
+          const next = imgs[lightbox.index + 1];
+          if (next?.url) setLightbox({ url: next.url, index: lightbox.index + 1 });
+        }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox, galleryImages]);
+
+  // Prevent body scroll when lightbox open
+  useEffect(() => {
+    if (lightbox) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [lightbox]);
 
   const images = galleryImages?.filter((g) => g.url) || [];
   const count = images.length;
@@ -105,61 +137,63 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
         </time>
       </div>
 
-      {lightbox && (
-        <>
-          {/* Mask overlay */}
+      {lightbox && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+          {/* Mask */}
           <div
-            className="fixed inset-0 z-40 bg-black/90 backdrop-blur-xl"
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
             onClick={() => setLightbox(null)}
           />
 
-          {/* Lightbox controls + image */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-8 pointer-events-none">
-            {/* Close */}
-            <button
-              onClick={() => setLightbox(null)}
-              className="pointer-events-auto absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-              </svg>
-            </button>
+          {/* Close */}
+          <button
+            onClick={() => setLightbox(null)}
+            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
 
-            {/* Counter */}
-            <div className="pointer-events-auto absolute left-4 top-4 z-10 rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-white/50 backdrop-blur-sm">
-              {lightbox.index + 1} / {count}
-            </div>
-
-            {/* Prev */}
-            {lightbox.index > 0 && (
-              <button
-                onClick={(e) => { e.stopPropagation(); setLightbox({ url: images[lightbox.index - 1].url!, index: lightbox.index - 1 }); }}
-                className="pointer-events-auto absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
-              >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m15 18-6-6 6-6"/></svg>
-              </button>
-            )}
-
-            {/* Next */}
-            {lightbox.index < count - 1 && (
-              <button
-                onClick={(e) => { e.stopPropagation(); setLightbox({ url: images[lightbox.index + 1].url!, index: lightbox.index + 1 }); }}
-                className="pointer-events-auto absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
-              >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
-              </button>
-            )}
-
-            {/* Image */}
-            <div className="pointer-events-auto z-10 max-h-full max-w-full" onClick={(e) => e.stopPropagation()}>
-              <img
-                src={lightbox.url}
-                alt=""
-                className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain"
-              />
-            </div>
+          {/* Counter */}
+          <div className="absolute left-4 top-4 z-10 rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-white/50 backdrop-blur-sm">
+            {lightbox.index + 1} / {count}
           </div>
-        </>
+
+          {/* Prev */}
+          {lightbox.index > 0 && (
+            <button
+              onClick={() => {
+                const prev = images[lightbox.index - 1];
+                setLightbox({ url: prev.url!, index: lightbox.index - 1 });
+              }}
+              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+          )}
+
+          {/* Next */}
+          {lightbox.index < count - 1 && (
+            <button
+              onClick={() => {
+                const next = images[lightbox.index + 1];
+                setLightbox({ url: next.url!, index: lightbox.index + 1 });
+              }}
+              className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          )}
+
+          {/* Image */}
+          <img
+            src={lightbox.url}
+            alt=""
+            className="relative z-10 max-h-[90vh] max-w-[90vw] rounded-xl object-contain"
+          />
+        </div>,
+        document.body
       )}
     </div>
   );
