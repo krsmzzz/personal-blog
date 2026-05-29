@@ -87,7 +87,7 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
         transition: "opacity 0.4s ease-out, transform 0.4s ease-out",
       }}
     >
-      <div className="rounded-xl border border-border/25 bg-card/70 p-4">
+      <div className="rounded-xl border border-border/25 bg-card/70 p-4 hover:bg-white dark:hover:bg-white/5">
         {excerpt && (
           <p className="text-[14px] leading-7 whitespace-pre-wrap text-foreground/80">
             {excerpt}
