@@ -91,7 +91,7 @@ export async function getAllIdeas(preview = false): Promise<Idea[]> {
       "title": content[0].children[0].text,
       "slug": _id,
       date,
-      "excerpt": array::join(string::split(pt::text(content), "")[0..999], ""),
+      "excerpt": array::join(string::split(pt::text(content), "")[0..1999], ""),
       "galleryImages": images[] {
         "asset": asset->{url},
         alt
@@ -108,7 +108,7 @@ export async function getIdeaBySlug(slug: string, preview = false): Promise<Idea
       "title": content[0].children[0].text,
       "slug": _id,
       date,
-      "excerpt": array::join(string::split(pt::text(content), "")[0..999], ""),
+      "excerpt": array::join(string::split(pt::text(content), "")[0..1999], ""),
       "galleryImages": images[] {
         "asset": asset->{url},
         alt
