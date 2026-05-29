@@ -21,7 +21,7 @@ function formatDate(dateStr: string) {
 
 function getGridClass(count: number): string {
   if (count === 1) return "grid-cols-1";
-  if (count === 2) return "grid-cols-2";
+  if (count === 2) return "grid-cols-3";
   return "grid-cols-3";
 }
 
@@ -105,7 +105,7 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
                 onClick={() => setLightbox({ url: img.url!, index: i })}
                 className={
                   count === 1
-                    ? "group inline-block cursor-zoom-in overflow-hidden rounded-lg"
+                    ? "group relative inline-block cursor-zoom-in overflow-hidden rounded-lg"
                     : `group relative w-full cursor-zoom-in overflow-hidden rounded-lg max-h-48 ${getImageClass(count, i)}`
                 }
               >
