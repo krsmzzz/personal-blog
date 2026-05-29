@@ -19,14 +19,11 @@ function formatDate(dateStr: string) {
   });
 }
 
-function getGridClass(count: number): string {
-  if (count === 1) return "grid-cols-1";
-  if (count === 2) return "grid-cols-3";
+function getGridClass(_count: number): string {
   return "grid-cols-3";
 }
 
-function getImageClass(count: number, index: number): string {
-  if (count === 1) return "";
+function getImageClass(_count: number, _index: number): string {
   return "aspect-square";
 }
 
@@ -103,28 +100,15 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
               <button
                 key={i}
                 onClick={() => setLightbox({ url: img.url!, index: i })}
-                className={
-                  count === 1
-                    ? "group relative inline-block cursor-zoom-in overflow-hidden rounded-lg"
-                    : `group relative w-full cursor-zoom-in overflow-hidden rounded-lg max-h-48 ${getImageClass(count, i)}`
-                }
+                className={`group relative w-full cursor-zoom-in overflow-hidden rounded-lg max-h-48 ${getImageClass(count, i)}`}
               >
-                {count === 1 ? (
-                  <img
-                    src={img.url!}
-                    alt={img.alt || ""}
-                    className="max-h-48 w-auto rounded-lg transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                ) : (
-                  <Image
-                    src={img.url!}
-                    alt={img.alt || ""}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 50vw, 250px"
-                  />
-                )}
+                <Image
+                  src={img.url!}
+                  alt={img.alt || ""}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 33vw, 180px"
+                />
                 <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/15" />
               </button>
             ))}
