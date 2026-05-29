@@ -141,7 +141,7 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center">
           {/* Mask */}
           <div
-            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+            className="absolute inset-0 bg-black/50 backdrop-blur-xl"
             onClick={() => setLightbox(null)}
           />
 
