@@ -108,13 +108,17 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
               <button
                 key={i}
                 onClick={() => setLightbox({ url: img.url!, index: i })}
-                className={`group relative w-full cursor-zoom-in overflow-hidden rounded-lg ${getImageClass(count, i)}`}
+                className={
+                  count === 1
+                    ? "group inline-block cursor-zoom-in overflow-hidden rounded-lg"
+                    : `group relative w-full cursor-zoom-in overflow-hidden rounded-lg max-h-48 ${getImageClass(count, i)}`
+                }
               >
                 {count === 1 ? (
                   <img
                     src={img.url!}
                     alt={img.alt || ""}
-                    className="w-auto max-h-48 transition-transform duration-500 group-hover:scale-105"
+                    className="max-h-48 w-auto rounded-lg transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                   />
                 ) : (
@@ -139,13 +143,11 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
 
       {lightbox && createPortal(
         <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center">
-          {/* Mask - no blur */}
           <div
             className="absolute inset-0 bg-black/75"
             onClick={() => setLightbox(null)}
           />
 
-          {/* Prev */}
           {lightbox.index > 0 && (
             <button
               onClick={() => {
@@ -158,7 +160,6 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
             </button>
           )}
 
-          {/* Next */}
           {lightbox.index < count - 1 && (
             <button
               onClick={() => {
@@ -171,14 +172,12 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
             </button>
           )}
 
-          {/* Image */}
           <img
             src={lightbox.url}
             alt=""
             className="relative z-10 max-h-[85vh] max-w-[90vw] rounded-xl object-contain"
           />
 
-          {/* Counter - below image, centered */}
           <div className="relative z-10 mt-4 rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-white/50">
             {lightbox.index + 1} / {count}
           </div>
