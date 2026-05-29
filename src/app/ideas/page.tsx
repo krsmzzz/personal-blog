@@ -42,9 +42,9 @@ export default async function IdeasPage() {
                 <div className="h-px flex-1 bg-border/20" />
               </div>
               <div className="max-w-xl">
-                {byYear.get(year)!.map((idea) => (
+                {byYear.get(year)!.map((idea, idx) => (
                   <div key={idea.slug} className="mb-4 break-inside-avoid">
-                    <IdeaCard slug={idea.slug} frontmatter={idea.frontmatter} />
+                    <IdeaCard slug={idea.slug} frontmatter={idea.frontmatter} index={idx} />
                   </div>
                 ))}
               </div>
