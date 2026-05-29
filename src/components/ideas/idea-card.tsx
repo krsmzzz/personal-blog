@@ -138,27 +138,12 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
       </div>
 
       {lightbox && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center">
-          {/* Mask */}
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center">
+          {/* Mask - no blur */}
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-xl"
+            className="absolute inset-0 bg-black/85"
             onClick={() => setLightbox(null)}
           />
-
-          {/* Close */}
-          <button
-            onClick={() => setLightbox(null)}
-            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-            </svg>
-          </button>
-
-          {/* Counter */}
-          <div className="absolute left-4 top-4 z-10 rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-white/50 backdrop-blur-sm">
-            {lightbox.index + 1} / {count}
-          </div>
 
           {/* Prev */}
           {lightbox.index > 0 && (
@@ -167,7 +152,7 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
                 const prev = images[lightbox.index - 1];
                 setLightbox({ url: prev.url!, index: lightbox.index - 1 });
               }}
-              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 transition-colors hover:bg-white/20 hover:text-white"
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m15 18-6-6 6-6"/></svg>
             </button>
@@ -180,7 +165,7 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
                 const next = images[lightbox.index + 1];
                 setLightbox({ url: next.url!, index: lightbox.index + 1 });
               }}
-              className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+              className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2.5 text-white/50 transition-colors hover:bg-white/20 hover:text-white"
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>
@@ -190,8 +175,13 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
           <img
             src={lightbox.url}
             alt=""
-            className="relative z-10 max-h-[90vh] max-w-[90vw] rounded-xl object-contain"
+            className="relative z-10 max-h-[85vh] max-w-[90vw] rounded-xl object-contain"
           />
+
+          {/* Counter - below image, centered */}
+          <div className="relative z-10 mt-4 rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-white/50">
+            {lightbox.index + 1} / {count}
+          </div>
         </div>,
         document.body
       )}
