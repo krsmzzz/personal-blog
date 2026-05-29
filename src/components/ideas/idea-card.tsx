@@ -22,16 +22,11 @@ function formatDate(dateStr: string) {
 function getGridClass(count: number): string {
   if (count === 1) return "grid-cols-1";
   if (count === 2) return "grid-cols-2";
-  if (count === 3) return "grid-cols-2";
   return "grid-cols-3";
 }
 
 function getImageClass(count: number, index: number): string {
   if (count === 1) return "";
-  if (count === 3) {
-    if (index === 0) return "aspect-square row-span-2";
-    return "aspect-square";
-  }
   return "aspect-square";
 }
 
@@ -95,7 +90,7 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
         transition: "opacity 0.4s ease-out, transform 0.4s ease-out",
       }}
     >
-      <div className="rounded-xl border border-border/25 bg-card/70 p-4 transition-all duration-300 hover:border-border/50">
+      <div className="rounded-xl border border-border/25 bg-card/70 p-4">
         {excerpt && (
           <p className="text-[13px] leading-relaxed whitespace-pre-wrap text-muted-foreground/80">
             {excerpt}
