@@ -87,9 +87,9 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
         transition: "opacity 0.4s ease-out, transform 0.4s ease-out",
       }}
     >
-      <div className="rounded-xl border border-border/25 bg-card/70 p-4">
+      <div className="rounded-xl border border-border/20 bg-card/80 p-4 shadow-sm">
         {excerpt && (
-          <p className="text-[13px] leading-relaxed whitespace-pre-wrap text-muted-foreground/80">
+          <p className="text-[14px] leading-7 whitespace-pre-wrap text-foreground/80">
             {excerpt}
           </p>
         )}
@@ -115,7 +115,7 @@ export function IdeaCard({ slug, frontmatter }: IdeaCardProps) {
           </div>
         )}
 
-        <time className="mt-3 block font-mono text-[10px] text-muted-foreground/25">
+        <time className="mt-3 block font-mono text-[10px] text-muted-foreground/35">
           {formatDate(date)}
         </time>
       </div>
