@@ -2,67 +2,39 @@
 
 import { useEffect, useRef } from "react";
 
-/**
- * Deep infra blue cursor-following glow.
- * Delayed spring follow (stiffness ≈ 40, damping ≈ 30).
- * Two layers: main glow + trailing haze. Blur 160px / 150px.
- */
 export function CursorGlow() {
   const glowRef = useRef<HTMLDivElement>(null);
-  const trailRef = useRef<HTMLDivElement>(null);
-  const posRef = useRef({ x: -600, y: -600 });
-  const targetRef = useRef({ x: -600, y: -600 });
-  const velRef = useRef({ x: 0, y: 0 });
-  const trailPosRef = useRef({ x: -500, y: -500 });
-  const trailVelRef = useRef({ x: 0, y: 0 });
+  const mouseRef = useRef({ x: -300, y: -300 });
+  const posRef = useRef({ x: -300, y: -300 });
+  const trailPosRef = useRef({ x: -300, y: -300 });
   const rafRef = useRef(0);
-  const mountedRef = useRef(false);
 
   useEffect(() => {
     const glow = glowRef.current;
-    const trail = trailRef.current;
-    if (!glow || !trail) return;
+    if (!glow) return;
 
     const onMove = (e: MouseEvent) => {
-      targetRef.current = { x: e.clientX, y: e.clientY };
-      if (!mountedRef.current) {
-        posRef.current = { x: e.clientX, y: e.clientY };
-        trailPosRef.current = { x: e.clientX, y: e.clientY };
-        mountedRef.current = true;
-        glow.style.opacity = "1";
-        trail.style.opacity = "1";
-      }
+      mouseRef.current = { x: e.clientX, y: e.clientY };
     };
 
     const animate = () => {
       const pos = posRef.current;
-      const target = targetRef.current;
-      const vel = velRef.current;
+      const tgt = mouseRef.current;
       const tPos = trailPosRef.current;
-      const tVel = trailVelRef.current;
 
-      // Main glow — soft spring
-      const dx = target.x - pos.x;
-      const dy = target.y - pos.y;
-      vel.x += dx * 0.018;
-      vel.y += dy * 0.018;
-      vel.x *= 0.94;
-      vel.y *= 0.94;
-      pos.x += vel.x;
-      pos.y += vel.y;
+      // Main glow — fast follow
+      pos.x += (tgt.x - pos.x) * 0.15;
+      pos.y += (tgt.y - pos.y) * 0.15;
 
-      // Trail — even slower
-      const tdx = pos.x - tPos.x;
-      const tdy = pos.y - tPos.y;
-      tVel.x += tdx * 0.008;
-      tVel.y += tdy * 0.008;
-      tVel.x *= 0.96;
-      tVel.y *= 0.96;
-      tPos.x += tVel.x;
-      tPos.y += tVel.y;
+      // Trail — slower, follows the main glow
+      tPos.x += (pos.x - tPos.x) * 0.06;
+      tPos.y += (pos.y - tPos.y) * 0.06;
 
-      glow.style.transform = `translate(${pos.x - 500}px, ${pos.y - 500}px)`;
-      trail.style.transform = `translate(${tPos.x - 550}px, ${tPos.y - 550}px)`;
+      // Single element with two gradient layers — same color
+      glow.style.background = [
+        `radial-gradient(circle 340px at ${pos.x}px ${pos.y}px, rgba(59,130,246,0.20) 0%, rgba(59,130,246,0.06) 30%, rgba(37,99,235,0.02) 55%, transparent 65%)`,
+        `radial-gradient(circle 280px at ${tPos.x}px ${tPos.y}px, rgba(59,130,246,0.06) 0%, rgba(59,130,246,0.02) 40%, transparent 65%)`,
+      ].join(", ");
 
       rafRef.current = requestAnimationFrame(animate);
     };
@@ -77,38 +49,15 @@ export function CursorGlow() {
   }, []);
 
   return (
-    <>
-      {/* Main cursor glow — deep blue, 1000px, blur 160px */}
-      <div
-        ref={glowRef}
-        className="pointer-events-none fixed left-0 top-0 z-20 opacity-0"
-        style={{
-          width: "1000px",
-          height: "1000px",
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(59,130,246,0.14) 0%, rgba(59,130,246,0.06) 30%, rgba(37,99,235,0.02) 55%, transparent 70%)",
-          filter: "blur(160px)",
-          willChange: "transform",
-          transition: "opacity 2.5s ease-out",
-        }}
-      />
-
-      {/* Trail glow — indigo-tinged, 750px, blur 150px */}
-      <div
-        ref={trailRef}
-        className="pointer-events-none fixed left-0 top-0 z-20 opacity-0"
-        style={{
-          width: "750px",
-          height: "750px",
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(99,102,241,0.08) 0%, rgba(37,99,235,0.03) 40%, transparent 68%)",
-          filter: "blur(150px)",
-          willChange: "transform",
-          transition: "opacity 2.5s ease-out",
-        }}
-      />
-    </>
+    <div
+      ref={glowRef}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9000,
+        pointerEvents: "none",
+        mixBlendMode: "screen",
+      }}
+    />
   );
 }

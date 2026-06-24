@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight, Circle } from "lucide-react";
 
@@ -75,108 +75,52 @@ function TerminalCard() {
   );
 }
 
-// === Hero Glow layers with subtle mouse parallax ===
-
+// === Static atmosphere layers (no mouse parallax) ===
 function HeroGlowLayers() {
-  const layer1Ref = useRef<HTMLDivElement>(null);
-  const layer2Ref = useRef<HTMLDivElement>(null);
-  const layer3Ref = useRef<HTMLDivElement>(null);
-  const rafRef = useRef(0);
-  const mouseRef = useRef({ x: 0.5, y: 0.5 });
-  const currentRef = useRef({ x: 0.5, y: 0.5 });
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      mouseRef.current = {
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight,
-      };
-    };
-
-    const animate = () => {
-      const cur = currentRef.current;
-      const tgt = mouseRef.current;
-      cur.x += (tgt.x - cur.x) * 0.012;
-      cur.y += (tgt.y - cur.y) * 0.012;
-
-      const l1 = layer1Ref.current;
-      const l2 = layer2Ref.current;
-      const l3 = layer3Ref.current;
-
-      if (l1) {
-        const dx = (cur.x - 0.5) * 12;
-        const dy = (cur.y - 0.5) * 12;
-        l1.style.transform = `translate(calc(15% + ${dx}px), calc(-30% + ${dy}px))`;
-      }
-      if (l2) {
-        const dx = (cur.x - 0.5) * -8;
-        const dy = (cur.y - 0.5) * -8;
-        l2.style.transform = `translate(calc(55% + ${dx}px), calc(5% + ${dy}px))`;
-      }
-      if (l3) {
-        const dx = (cur.x - 0.5) * 6;
-        const dy = (cur.y - 0.5) * -6;
-        l3.style.transform = `translate(calc(0% + ${dx}px), calc(30% + ${dy}px))`;
-      }
-
-      rafRef.current = requestAnimationFrame(animate);
-    };
-
-    window.addEventListener("mousemove", onMove, { passive: true });
-    rafRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
   return (
     <>
-      {/* Layer 1 — Deep blue primary haze, top-right, 950px, blur 170px */}
+      {/* Layer 1 — Deep blue primary haze, top-right */}
       <div
-        ref={layer1Ref}
         className="pointer-events-none absolute left-0 top-0 rounded-full will-change-transform"
         style={{
-          width: "950px",
-          height: "950px",
+          width: "300px",
+          height: "300px",
           background:
-            "radial-gradient(ellipse at 60% 30%, rgba(59,130,246,0.16) 0%, rgba(59,130,246,0.08) 25%, rgba(37,99,235,0.03) 50%, transparent 70%)",
-          filter: "blur(170px)",
+            "radial-gradient(ellipse at 60% 30%, rgba(59,130,246,0.30) 0%, rgba(59,130,246,0.16) 25%, rgba(37,99,235,0.06) 50%, transparent 70%)",
+          filter: "blur(90px)",
           animation: "glow-atmosphere-a 18s ease-in-out infinite",
         }}
       />
 
-      {/* Layer 2 — Cool blue + indigo side haze, right edge, 750px, blur 150px */}
+      {/* Layer 2 — Cool blue + indigo side haze, right edge */}
       <div
-        ref={layer2Ref}
         className="pointer-events-none absolute right-0 top-0 rounded-full will-change-transform"
         style={{
-          width: "750px",
-          height: "750px",
+          width: "250px",
+          height: "250px",
           background:
-            "radial-gradient(ellipse at 40% 40%, rgba(96,165,250,0.14) 0%, rgba(99,102,241,0.06) 25%, rgba(59,130,246,0.03) 45%, transparent 72%)",
-          filter: "blur(150px)",
+            "radial-gradient(ellipse at 40% 40%, rgba(96,165,250,0.28) 0%, rgba(99,102,241,0.14) 25%, rgba(59,130,246,0.06) 45%, transparent 72%)",
+          filter: "blur(80px)",
           animation: "glow-atmosphere-b 16s ease-in-out infinite",
         }}
       />
 
-      {/* Layer 3 — Blue-gray bottom depth, 650px, blur 140px */}
+      {/* Layer 3 — Blue-gray bottom depth */}
       <div
-        ref={layer3Ref}
         className="pointer-events-none absolute left-0 bottom-0 rounded-full will-change-transform"
         style={{
-          width: "650px",
-          height: "650px",
+          width: "210px",
+          height: "210px",
           background:
-            "radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.10) 0%, rgba(59,130,246,0.04) 35%, transparent 68%)",
-          filter: "blur(140px)",
+            "radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.22) 0%, rgba(59,130,246,0.09) 35%, transparent 68%)",
+          filter: "blur(75px)",
           animation: "glow-atmosphere-c 20s ease-in-out infinite",
         }}
       />
     </>
   );
 }
+
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
